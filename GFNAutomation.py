@@ -1,9 +1,13 @@
-import json, time
+import json, time, subprocess, threading
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.remote.webdriver import WebDriver
+
+KEYDELAY = 0.2
 
 # Send a raw command via the devtools protocol
 def dispatchKeyEvent(driver, name, options = {}):
@@ -33,112 +37,147 @@ def holdKey(key, driver, duration):
       dispatchKeyEvent(driver, "keyUp", options)
       break
 
+# Launches GFN in chrome and starts a Rocket League game session
+def launchGame(driver: WebDriver) -> WebElement:
+  # Starts a Rocket league game session on GFN
+  driver.get("https://play.geforcenow.com/mall/#/streamer?launchSource=GeForceNOW&cmsId=100871611&shortName=rocket_league_egs&appLaunchMode=Default&bgImageUrl=https:%2F%2Fimg.nvidiagrid.net%2Fapps%2F100871511%2FZZ%2FHERO_IMAGE_01_ba30a70f-6050-47ca-8303-bfaad8439a6b.jpg")
+
+  # Waits until the "start playing" prompt comes up and clicks on it (timesout after 1 hour)
+  WebDriverWait(driver, 3600).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".mat-focus-indicator.font-button2.text-button-icon.mat-raised-button.mat-button-base.mat-accent"))).click()
+
+  # Waits until the game loads on the remote systen (usually takes around 30 seconds)
+  time.sleep(32)
+
+  # Locates the video stream
+  element = driver.find_element(By.TAG_NAME, "video")
+
+  # Presses the enter key to start the game 
+  element.send_keys(Keys.ENTER)
+
+  return element
+
+# Starts a private match in Rocket League
+def launchMatch(element: WebElement):
+  # Navigates to the play button
+  for i in range(7):
+      time.sleep(KEYDELAY)
+      element.send_keys(Keys.ARROW_UP)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ENTER)
+
+  # Navigates to custom game button
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_LEFT)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_RIGHT)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ENTER)
+
+  # Navigates to private match button
+  for i in range(2):
+      time.sleep(KEYDELAY)
+      element.send_keys(Keys.ARROW_RIGHT)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ENTER)
+
+  # Navigates to create private match button
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_RIGHT)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_LEFT)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ENTER)
+
+  # Navigates to create match button
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_UP)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_DOWN)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ENTER)
+
+  # Navigates to create match button
+  for i in range(2):
+      time.sleep(KEYDELAY)
+      element.send_keys(Keys.ARROW_DOWN)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ENTER)
+  
+  # Navigates to auto button
+  time.sleep(4)
+  element.send_keys(Keys.ARROW_UP)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_DOWN)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ENTER)
+
+# Starts capturing network traffic on the ethernet port
+def captureTraffic():
+  # Calls tshark in the command prompt
+  subprocess.run("tshark -i \\Device\\NPF_{24659334-841D-41D5-8768-DAC984E0CD46} -w C:\\Users\\pouri\\OneDrive\\Documents\\StarlinkGamingScripts\\pyshark.pcap -a duration:5")
+
+# Drives the car around in the match
+def driveCar():
+  # Waits for the match to load
+  time.sleep(7)
+  
+  # Moves forward for 3 seconds and then backward for 3 seconds
+  holdKey('w', driver, 3)
+  holdKey('s', driver, 3)
+
+def closeGame(element: WebElement):
+   # Leaves the match
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ESCAPE)
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ARROW_UP)
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ENTER)
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ARROW_LEFT)
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ENTER)
+   
+   # Waits for the main menu to load
+   time.sleep(3)
+
+   # Leaves the game
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ARROW_UP)
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ENTER)
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ARROW_LEFT)
+   time.sleep(KEYDELAY)
+   element.send_keys(Keys.ENTER)
+
+  # Wait until the game properly closes
+   time.sleep(15)
 
 # Loads my chrome profile, so that GFN doesn't require login
 options = webdriver.ChromeOptions() 
 options.add_argument("user-data-dir=C:\\Users\\pouri\\AppData\\Local\\Google\\Chrome\\User Data") 
 driver = webdriver.Chrome(options=options)
 
-# Starts a Rocket league game session on GFN
-driver.get("https://play.geforcenow.com/mall/#/streamer?launchSource=GeForceNOW&cmsId=100871611&shortName=rocket_league_egs&appLaunchMode=Default&bgImageUrl=https:%2F%2Fimg.nvidiagrid.net%2Fapps%2F100871511%2FZZ%2FHERO_IMAGE_01_ba30a70f-6050-47ca-8303-bfaad8439a6b.jpg")
+# Launches the game and match
+element = launchGame(driver=driver)
+launchMatch(element=element)
 
-# Waits until the "start playing" prompt comes up and clicks on it (timesout after 1 hour)
-WebDriverWait(driver, 3600).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".mat-focus-indicator.font-button2.text-button-icon.mat-raised-button.mat-button-base.mat-accent"))).click()
+# Creates seperate threads for driving the car and capturing network traffic 
+gamePlay = threading.Thread(target=driveCar)
+dataCollection = threading.Thread(target=captureTraffic)
 
-# Waits until the game loads on the remote systen
-time.sleep(30)
+# Runs both threads concurrently
+gamePlay.start()
+dataCollection.start()
 
-# Clicks on the video stream to start the game (doesn't seem to work)
-element = driver.find_element(By.TAG_NAME, "video")
+# Wait for the execution of the threads to complete before the rest of the program executes
+gamePlay.join()
+dataCollection.join()
 
-# Enters the game
-element.send_keys(Keys.ENTER)
+# Closes the game
+closeGame(element=element)
 
-# The remaining keystrokes navigate to start a private match 
-for i in range(7):
-    time.sleep(0.1)
-    element.send_keys(Keys.ARROW_UP)
-
-time.sleep(0.1)
-element.send_keys(Keys.ENTER)
-
-time.sleep(0.1)
-element.send_keys(Keys.ARROW_LEFT)
-
-time.sleep(0.1)
-element.send_keys(Keys.ARROW_RIGHT)
-
-time.sleep(0.1)
-element.send_keys(Keys.ENTER)
-
-for i in range(2):
-    time.sleep(0.1)
-    element.send_keys(Keys.ARROW_RIGHT)
-
-time.sleep(0.1)
-element.send_keys(Keys.ENTER)
-
-time.sleep(0.1)
-element.send_keys(Keys.ARROW_RIGHT)
-
-time.sleep(0.1)
-element.send_keys(Keys.ARROW_LEFT)
-
-time.sleep(0.1)
-element.send_keys(Keys.ENTER)
-
-time.sleep(0.1)
-element.send_keys(Keys.ARROW_UP)
-
-time.sleep(0.1)
-element.send_keys(Keys.ARROW_DOWN)
-
-time.sleep(0.1)
-element.send_keys(Keys.ENTER)
-
-for i in range(2):
-    time.sleep(0.1)
-    element.send_keys(Keys.ARROW_DOWN)
-
-time.sleep(0.1)
-element.send_keys(Keys.ENTER)
-
-time.sleep(4)
-element.send_keys(Keys.ARROW_UP)
-
-time.sleep(0.1)
-element.send_keys(Keys.ARROW_DOWN)
-
-time.sleep(0.1)
-element.send_keys(Keys.ENTER)
-
-time.sleep(7)
-
-# Moves the car forward for 3 seconds and then backward for 3 seconds
-holdKey('w', driver, 3)
-holdKey('s', driver, 3)
-
-
-# Keeps the automation session open
-time.sleep(20000)
-
-
-# for i in range(3):
-#     time.sleep(1)
-#     element.send_keys(Keys.ARROW_LEFT)
-
-# time.sleep(1)
-# element.send_keys(Keys.ENTER)
-
-# for i in range(2):
-#     time.sleep(1)
-#     element.send_keys(Keys.ARROW_RIGHT)
-
-# time.sleep(1)
-# element.send_keys(Keys.ARROW_DOWN)
-
-# time.sleep(1)
-# element.send_keys(Keys.ENTER)
 
 
 
