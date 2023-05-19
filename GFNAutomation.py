@@ -1,3 +1,4 @@
+import Unique
 import json, time, subprocess, threading
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -9,9 +10,9 @@ from selenium.webdriver.remote.webdriver import WebDriver
 
 KEY_DELAY = 0.2
 CAPTURE_LENGTH = "5"
-ETHERNET = "\\Device\\NPF_{24659334-841D-41D5-8768-DAC984E0CD46}"
-PROFILE_PATH = "C:\\Users\\pouri\\AppData\\Local\\Google\\Chrome\\User Data"
-CAPTURE_PATH = "C:\\Users\\pouri\\OneDrive\\Documents\\StarlinkGamingScripts\\pyshark.pcap"
+INTERFACE = Unique.INTERFACE
+PROFILE_PATH = Unique.PROFILE_PATH
+CAPTURE_PATH = Unique.CAPTURE_PATH
 
 # Send a raw command via the devtools protocol
 def dispatchKeyEvent(driver, name, options = {}):
@@ -119,7 +120,7 @@ def launchMatch(element: WebElement):
 # Starts capturing network traffic on the ethernet port
 def captureTraffic():
   # Calls tshark in the command prompt
-  subprocess.run("tshark -i " + ETHERNET + " -w " + CAPTURE_PATH + " -a duration:" + CAPTURE_LENGTH)
+  subprocess.run("tshark -i " + INTERFACE + " -w " + CAPTURE_PATH + " -a duration:" + CAPTURE_LENGTH)
 
 # Drives the car around in the match
 def driveCar():
