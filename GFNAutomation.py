@@ -8,6 +8,8 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
 
 KEYDELAY = 0.2
+WIFI = "\\Device\\NPF_{F031F437-48C1-4D6A-8FF6-7B9B9169E070}"
+ETHERNET = "\\Device\\NPF_{24659334-841D-41D5-8768-DAC984E0CD46}"
 
 # Send a raw command via the devtools protocol
 def dispatchKeyEvent(driver, name, options = {}):
@@ -59,9 +61,10 @@ def launchGame(driver: WebDriver) -> WebElement:
 # Starts a private match in Rocket League
 def launchMatch(element: WebElement):
   # Navigates to the play button
-  for i in range(7):
-      time.sleep(KEYDELAY)
-      element.send_keys(Keys.ARROW_UP)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_DOWN)
+  time.sleep(KEYDELAY)
+  element.send_keys(Keys.ARROW_UP)
   time.sleep(KEYDELAY)
   element.send_keys(Keys.ENTER)
 
@@ -114,7 +117,7 @@ def launchMatch(element: WebElement):
 # Starts capturing network traffic on the ethernet port
 def captureTraffic():
   # Calls tshark in the command prompt
-  subprocess.run("tshark -i \\Device\\NPF_{24659334-841D-41D5-8768-DAC984E0CD46} -w C:\\Users\\pouri\\OneDrive\\Documents\\StarlinkGamingScripts\\pyshark.pcap -a duration:5")
+  subprocess.run("tshark -i " + ETHERNET + " -w C:\\Users\\pouri\\OneDrive\\Documents\\StarlinkGamingScripts\\pyshark.pcap -a duration:5")
 
 # Drives the car around in the match
 def driveCar():
@@ -142,8 +145,9 @@ def closeGame(element: WebElement):
    time.sleep(3)
 
    # Leaves the game
-   time.sleep(KEYDELAY)
-   element.send_keys(Keys.ARROW_UP)
+   for i in range(6):
+      time.sleep(KEYDELAY)
+      element.send_keys(Keys.ARROW_DOWN)
    time.sleep(KEYDELAY)
    element.send_keys(Keys.ENTER)
    time.sleep(KEYDELAY)
@@ -157,6 +161,7 @@ def closeGame(element: WebElement):
 # Loads my chrome profile, so that GFN doesn't require login
 options = webdriver.ChromeOptions() 
 options.add_argument("user-data-dir=C:\\Users\\pouri\\AppData\\Local\\Google\\Chrome\\User Data") 
+options.headless = True
 driver = webdriver.Chrome(options=options)
 
 # Launches the game and match
@@ -177,6 +182,9 @@ dataCollection.join()
 
 # Closes the game
 closeGame(element=element)
+
+# Closes the automation session
+driver.close()
 
 
 
