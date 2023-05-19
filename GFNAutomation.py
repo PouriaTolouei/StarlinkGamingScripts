@@ -7,9 +7,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
 
-KEYDELAY = 0.2
-WIFI = "\\Device\\NPF_{F031F437-48C1-4D6A-8FF6-7B9B9169E070}"
+KEY_DELAY = 0.2
+CAPTURE_LENGTH = "5"
 ETHERNET = "\\Device\\NPF_{24659334-841D-41D5-8768-DAC984E0CD46}"
+PROFILE_PATH = "C:\\Users\\pouri\\AppData\\Local\\Google\\Chrome\\User Data"
+CAPTURE_PATH = "C:\\Users\\pouri\\OneDrive\\Documents\\StarlinkGamingScripts\\pyshark.pcap"
 
 # Send a raw command via the devtools protocol
 def dispatchKeyEvent(driver, name, options = {}):
@@ -61,63 +63,63 @@ def launchGame(driver: WebDriver) -> WebElement:
 # Starts a private match in Rocket League
 def launchMatch(element: WebElement):
   # Navigates to the play button
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_DOWN)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_UP)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
 
   # Navigates to custom game button
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_LEFT)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_RIGHT)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
 
   # Navigates to private match button
   for i in range(2):
-      time.sleep(KEYDELAY)
+      time.sleep(KEY_DELAY)
       element.send_keys(Keys.ARROW_RIGHT)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
 
   # Navigates to create private match button
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_RIGHT)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_LEFT)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
 
   # Navigates to create match button
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_UP)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_DOWN)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
 
   # Navigates to create match button
   for i in range(2):
-      time.sleep(KEYDELAY)
+      time.sleep(KEY_DELAY)
       element.send_keys(Keys.ARROW_DOWN)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
   
   # Navigates to auto button
   time.sleep(4)
   element.send_keys(Keys.ARROW_UP)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_DOWN)
-  time.sleep(KEYDELAY)
+  time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
 
 # Starts capturing network traffic on the ethernet port
 def captureTraffic():
   # Calls tshark in the command prompt
-  subprocess.run("tshark -i " + ETHERNET + " -w C:\\Users\\pouri\\OneDrive\\Documents\\StarlinkGamingScripts\\pyshark.pcap -a duration:5")
+  subprocess.run("tshark -i " + ETHERNET + " -w " + CAPTURE_PATH + " -a duration:" + CAPTURE_LENGTH)
 
 # Drives the car around in the match
 def driveCar():
@@ -130,15 +132,15 @@ def driveCar():
 
 def closeGame(element: WebElement):
    # Leaves the match
-   time.sleep(KEYDELAY)
+   time.sleep(KEY_DELAY)
    element.send_keys(Keys.ESCAPE)
-   time.sleep(KEYDELAY)
+   time.sleep(KEY_DELAY)
    element.send_keys(Keys.ARROW_UP)
-   time.sleep(KEYDELAY)
+   time.sleep(KEY_DELAY)
    element.send_keys(Keys.ENTER)
-   time.sleep(KEYDELAY)
+   time.sleep(KEY_DELAY)
    element.send_keys(Keys.ARROW_LEFT)
-   time.sleep(KEYDELAY)
+   time.sleep(KEY_DELAY)
    element.send_keys(Keys.ENTER)
    
    # Waits for the main menu to load
@@ -146,13 +148,13 @@ def closeGame(element: WebElement):
 
    # Leaves the game
    for i in range(6):
-      time.sleep(KEYDELAY)
+      time.sleep(KEY_DELAY)
       element.send_keys(Keys.ARROW_DOWN)
-   time.sleep(KEYDELAY)
+   time.sleep(KEY_DELAY)
    element.send_keys(Keys.ENTER)
-   time.sleep(KEYDELAY)
+   time.sleep(KEY_DELAY)
    element.send_keys(Keys.ARROW_LEFT)
-   time.sleep(KEYDELAY)
+   time.sleep(KEY_DELAY)
    element.send_keys(Keys.ENTER)
 
   # Wait until the game properly closes
@@ -160,8 +162,7 @@ def closeGame(element: WebElement):
 
 # Loads my chrome profile, so that GFN doesn't require login
 options = webdriver.ChromeOptions() 
-options.add_argument("user-data-dir=C:\\Users\\pouri\\AppData\\Local\\Google\\Chrome\\User Data") 
-options.headless = True
+options.add_argument("user-data-dir=" + PROFILE_PATH) 
 driver = webdriver.Chrome(options=options)
 
 # Launches the game and match
