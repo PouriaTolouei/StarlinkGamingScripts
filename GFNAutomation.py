@@ -95,6 +95,16 @@ def launchMatch(element: WebElement):
     element.send_keys(Keys.ARROW_LEFT)
     time.sleep(KEY_DELAY)
     element.send_keys(Keys.ENTER)
+
+    # Navigates to create match button
+    time.sleep(KEY_DELAY)
+    element.send_keys(Keys.ARROW_UP)
+    time.sleep(KEY_DELAY)
+    element.send_keys(Keys.ARROW_DOWN)
+    time.sleep(KEY_DELAY)
+    element.send_keys(Keys.ENTER)
+
+
   elif PLAYER_TYPE == "guest":
     # Navigates to join private match button
     time.sleep(KEY_DELAY)
@@ -102,15 +112,8 @@ def launchMatch(element: WebElement):
     time.sleep(KEY_DELAY)
     element.send_keys(Keys.ENTER)
 
-  # Navigates to create match button
-  time.sleep(KEY_DELAY)
-  element.send_keys(Keys.ARROW_UP)
-  time.sleep(KEY_DELAY)
-  element.send_keys(Keys.ARROW_DOWN)
-  time.sleep(KEY_DELAY)
-  element.send_keys(Keys.ENTER)
 
-  # Navigates to create match button
+  # Navigates to create join button
   for i in range(2):
       time.sleep(KEY_DELAY)
       element.send_keys(Keys.ARROW_DOWN)
