@@ -137,7 +137,7 @@ def captureTraffic():
 def driveCar():
   if PLAYER_TYPE == 'host':
     # Waits for the match to load
-    time.sleep(14)
+    time.sleep(10)
   elif PLAYER_TYPE == 'guest':
      # Waits for the match to load
     time.sleep(7)
