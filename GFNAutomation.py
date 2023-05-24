@@ -13,6 +13,7 @@ CAPTURE_LENGTH = "5"
 INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
+PLAYER_TYPE = Unique.PLAYER_TYPE
 
 # Send a raw command via the devtools protocol
 def dispatchKeyEvent(driver, name, options = {}):
@@ -86,13 +87,20 @@ def launchMatch(element: WebElement):
   time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
 
-  # Navigates to create private match button
-  time.sleep(KEY_DELAY)
-  element.send_keys(Keys.ARROW_RIGHT)
-  time.sleep(KEY_DELAY)
-  element.send_keys(Keys.ARROW_LEFT)
-  time.sleep(KEY_DELAY)
-  element.send_keys(Keys.ENTER)
+  if PLAYER_TYPE == "host":
+    # Navigates to create private match button
+    time.sleep(KEY_DELAY)
+    element.send_keys(Keys.ARROW_RIGHT)
+    time.sleep(KEY_DELAY)
+    element.send_keys(Keys.ARROW_LEFT)
+    time.sleep(KEY_DELAY)
+    element.send_keys(Keys.ENTER)
+  elif PLAYER_TYPE == "guest":
+    # Navigates to join private match button
+    time.sleep(KEY_DELAY)
+    element.send_keys(Keys.ARROW_RIGHT)
+    time.sleep(KEY_DELAY)
+    element.send_keys(Keys.ENTER)
 
   # Navigates to create match button
   time.sleep(KEY_DELAY)
