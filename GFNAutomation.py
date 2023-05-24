@@ -135,8 +135,12 @@ def captureTraffic():
 
 # Drives the car around in the match
 def driveCar():
-  # Waits for the match to load
-  time.sleep(7)
+  if PLAYER_TYPE == 'host':
+    # Waits for the match to load
+    time.sleep(14)
+  elif PLAYER_TYPE == 'guest':
+     # Waits for the match to load
+    time.sleep(7)
   
   # Moves forward for 3 seconds and then backward for 3 seconds
   holdKey('w', driver, 3)
