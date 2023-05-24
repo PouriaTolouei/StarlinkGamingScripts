@@ -51,7 +51,7 @@ def launchGame(driver: WebDriver) -> WebElement:
   WebDriverWait(driver, 3600).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".mat-focus-indicator.font-button2.text-button-icon.mat-raised-button.mat-button-base.mat-accent"))).click()
 
   # Waits until the game loads on the remote systen (usually takes around 30 seconds)
-  time.sleep(32)
+  time.sleep(45)
 
   # Locates the video stream
   element = driver.find_element(By.TAG_NAME, "video")
