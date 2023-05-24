@@ -10,7 +10,7 @@ import subprocess
 url = 'https://ipranges.nvidiangn.net/v1/ips'
 
 
-reader = geoip2.database.Reader('C:/Users/pouri/Downloads/GeoLite2-City_20230509/GeoLite2-City.mmdb')
+reader = geoip2.database.Reader('C:\\Users\\uvic\\Documents\\GeoLite2-City_20230509\\GeoLite2-City.mmdb')
 
 ipsArray = requests.get(url).json()['ipList']
 ipsArrayClean = []
@@ -26,7 +26,7 @@ for i in range(len(ipsArray)):
     endingNums.append(int(ipsArray[i][cutIndex + 1:]))
 
 
-for i in range(len(ipsArray)):
+for i in range(len(ipsArrayClean)):
     maskNum = "255.255.255."
     if endingNums[i] == 24:
         maskNum += "0"
@@ -47,10 +47,6 @@ for i in range(len(ipsArray)):
     elif endingNums[i] == 32:
         maskNum += "255"
     
-    subprocess.run("route -p add " + ipsArrayClean[i] + " mask " + maskNum + " 192.168.0.254")
-    
-    print(ipsArrayClean[i])
-    print(maskNum)
-    print(endingNums[i])
-    print()
+    subprocess.run("route -p add " + ipsArrayClean[i] + " mask " + maskNum + " 192.168.1.1 IF 10")
+    # subprocess.run("route -p DELETE " + ipsArrayClean[i])
 
