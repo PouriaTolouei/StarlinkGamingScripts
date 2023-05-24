@@ -121,7 +121,7 @@ def launchMatch(element: WebElement):
   element.send_keys(Keys.ENTER)
   
   # Navigates to auto button
-  time.sleep(4)
+  time.sleep(8)
   element.send_keys(Keys.ARROW_UP)
   time.sleep(KEY_DELAY)
   element.send_keys(Keys.ARROW_DOWN)
