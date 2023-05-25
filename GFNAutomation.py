@@ -9,7 +9,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
 
 KEY_DELAY = 0.5
-CAPTURE_LENGTH = "5"
+CAPTURE_LENGTH = "35"
 INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
@@ -133,18 +133,69 @@ def captureTraffic():
   # Calls tshark in the command prompt
   subprocess.run("tshark -i " + INTERFACE + " -w " + CAPTURE_PATH + " -a duration:" + CAPTURE_LENGTH)
 
+# Holds forwards and left at the same time to steer left
+def steerLeft():
+  driveForward =  threading.Thread(target= holdKey, args=('w', driver, 1.40))
+  turnLeft = threading.Thread(target= holdKey, args=('a', driver, 1.40))
+  driveForward.start()
+  turnLeft.start()
+  driveForward.join()
+  turnLeft.join()
+
+# Holds forwards and right at the same time to steer right
+def steerRight():
+  driveForward =  threading.Thread(target= holdKey, args=('w', driver, 1.40))
+  turnRight = threading.Thread(target= holdKey, args=('d', driver, 1.40))
+  driveForward.start()
+  turnRight.start()
+  driveForward.join()
+  turnRight.join()
+
+# Holds forwards and boost at the same time to boost forward
+def boostForward():
+  driveForward =  threading.Thread(target= holdKey, args=('w', driver, 0.30))
+  boost = threading.Thread(target= holdKey, args=('x', driver, 0.30))
+  driveForward.start()
+  boost.start()
+  driveForward.join()
+  boost.join()
+
 # Drives the car around in the match
 def driveCar():
-  if PLAYER_TYPE == 'host':
-    # Waits for the match to load
-    time.sleep(10)
-  elif PLAYER_TYPE == 'guest':
-     # Waits for the match to load
-    time.sleep(7)
+  # Moves the car closer to the middle
+  holdKey('w', driver, 2)
+
+  # Drives in a loop in both directions (4 times each)
+  for i in range (4):
+    time.sleep(0.1)
+    steerLeft()
+    time.sleep(0.1)
+    boostForward()
+    time.sleep(0.1)
+    steerLeft()
+    time.sleep(0.1)
+    boostForward()
+
+    time.sleep(0.1)
+    steerRight()
+    time.sleep(0.1)
+    boostForward()
+    time.sleep(0.1)
+    steerRight()
+    time.sleep(0.1)
+    boostForward()
+
+  # Stops the car
+  holdKey('s', driver, 0.5)
+
+  # Makes sure the car has stopped
+  time.sleep(2)
   
-  # Moves forward for 3 seconds and then backward for 3 seconds
-  holdKey('w', driver, 3)
-  holdKey('s', driver, 3)
+  # Double Jumps
+  holdKey('z', driver, 0.5)
+  time.sleep(0.1)
+  holdKey('z', driver, 0.5)
+
 
 def closeGame(element: WebElement):
    # Leaves the match
@@ -185,6 +236,13 @@ driver = webdriver.Chrome(options=options)
 element = launchGame(driver=driver)
 launchMatch(element=element)
 
+if PLAYER_TYPE == 'host':
+  # Waits for the match to load
+  time.sleep(10)
+elif PLAYER_TYPE == 'guest':
+  # Waits for the match to load
+  time.sleep(7)
+
 # Creates seperate threads for driving the car and capturing network traffic 
 gamePlay = threading.Thread(target=driveCar)
 dataCollection = threading.Thread(target=captureTraffic)
@@ -196,6 +254,8 @@ dataCollection.start()
 # Wait for the execution of the threads to complete before the rest of the program executes
 gamePlay.join()
 dataCollection.join()
+
+time.sleep(5)
 
 # Closes the game
 closeGame(element=element)
