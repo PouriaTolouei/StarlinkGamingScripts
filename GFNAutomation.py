@@ -238,7 +238,7 @@ launchMatch(element=element)
 
 if PLAYER_TYPE == 'host':
   # Waits for the match to load
-  time.sleep(10)
+  time.sleep(12)
 elif PLAYER_TYPE == 'guest':
   # Waits for the match to load
   time.sleep(7)
