@@ -8,12 +8,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
 
+#----------------------------- Constants  --------------------------------------- 
+
 KEY_DELAY = 0.5
 CAPTURE_LENGTH = "35"
 INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
 PLAYER_TYPE = Unique.PLAYER_TYPE
+
+#-------------------------------- Methods ---------------------------------------- 
 
 # Send a raw command via the devtools protocol
 def dispatchKeyEvent(driver, name, options = {}):
@@ -129,9 +133,9 @@ def launchMatch(element: WebElement):
   element.send_keys(Keys.ENTER)
 
 # Starts capturing network traffic on the ethernet port
-def captureTraffic():
+def captureTraffic(iteration: int):
   # Calls tshark in the command prompt
-  subprocess.run("tshark -i " + INTERFACE + " -w " + CAPTURE_PATH + " -a duration:" + CAPTURE_LENGTH)
+  subprocess.run("tshark -i " + INTERFACE + " -w " + CAPTURE_PATH + iteration + ".pcap" + " -a duration:" + CAPTURE_LENGTH)
 
 # Holds forwards and left at the same time to steer left
 def steerLeft():
@@ -227,41 +231,44 @@ def closeGame(element: WebElement):
   # Wait until the game properly closes
    time.sleep(15)
 
-# Loads my chrome profile, so that GFN doesn't require login
-options = webdriver.ChromeOptions() 
-options.add_argument("user-data-dir=" + PROFILE_PATH) 
-driver = webdriver.Chrome(options=options)
+#-------------------------------- Execution ---------------------------------------- 
 
-# Launches the game and match
-element = launchGame(driver=driver)
-launchMatch(element=element)
+for i in range(10):
+  # Loads my chrome profile, so that GFN doesn't require login
+  options = webdriver.ChromeOptions() 
+  options.add_argument("user-data-dir=" + PROFILE_PATH) 
+  driver = webdriver.Chrome(options=options)
 
-if PLAYER_TYPE == 'host':
-  # Waits for the match to load
-  time.sleep(12)
-elif PLAYER_TYPE == 'guest':
-  # Waits for the match to load
-  time.sleep(7)
+  # Launches the game and match
+  element = launchGame(driver=driver)
+  launchMatch(element=element)
 
-# Creates seperate threads for driving the car and capturing network traffic 
-gamePlay = threading.Thread(target=driveCar)
-dataCollection = threading.Thread(target=captureTraffic)
+  if PLAYER_TYPE == 'host':
+    # Waits for the match to load
+    time.sleep(12)
+  elif PLAYER_TYPE == 'guest':
+    # Waits for the match to load
+    time.sleep(7)
 
-# Runs both threads concurrently
-gamePlay.start()
-dataCollection.start()
+  # Creates seperate threads for driving the car and capturing network traffic 
+  gamePlay = threading.Thread(target=driveCar)
+  dataCollection = threading.Thread(target=captureTraffic, args=(i))
 
-# Wait for the execution of the threads to complete before the rest of the program executes
-gamePlay.join()
-dataCollection.join()
+  # Runs both threads concurrently
+  gamePlay.start()
+  dataCollection.start()
 
-time.sleep(5)
+  # Wait for the execution of the threads to complete before the rest of the program executes
+  gamePlay.join()
+  dataCollection.join()
 
-# Closes the game
-closeGame(element=element)
+  time.sleep(5)
 
-# Closes the automation session
-driver.close()
+  # Closes the game
+  closeGame(element=element)
+
+  # Closes the automation session
+  driver.close()
 
 
 
