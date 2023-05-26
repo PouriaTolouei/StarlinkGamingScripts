@@ -1,5 +1,5 @@
 import Unique
-import json, time, subprocess, threading
+import json, time, subprocess, threading, os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -135,8 +135,23 @@ def launchMatch(element: WebElement):
 
 # Starts capturing network traffic on the ethernet port
 def captureTraffic(iteration: int):
+  
+  # Creates a new folder for each set of tests
+  path = Unique.CAPTURE_PATH + "1\\"
+  if i == 1:
+    testNum = 1
+    succesfullyCreated = False
+    
+    while not succesfullyCreated:
+      try:
+        os.mkdir(Unique.CAPTURE_PATH + str(testNum))
+        succesfullyCreated = True
+        path = Unique.CAPTURE_PATH + str(testNum) + "\\"
+      except FileExistsError:
+        testNum += 1
+
   # Calls tshark in the command prompt
-  subprocess.run("tshark -i " + INTERFACE + " -w " + CAPTURE_PATH + str(iteration) + ".pcap" + " -a duration:" + CAPTURE_LENGTH)
+  subprocess.run("tshark -i " + INTERFACE + " -w " + path + "Capture" + str(iteration) + ".pcap" + " -a duration:" + CAPTURE_LENGTH)
 
 # Holds forwards and left at the same time to steer left
 def steerLeft():
