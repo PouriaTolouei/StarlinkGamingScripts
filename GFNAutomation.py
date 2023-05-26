@@ -111,6 +111,7 @@ def launchMatch(element: WebElement):
 
   elif PLAYER_TYPE == "guest":
     # Navigates to join private match button
+    time.sleep(3)
     time.sleep(KEY_DELAY)
     element.send_keys(Keys.ARROW_RIGHT)
     time.sleep(KEY_DELAY)
@@ -135,7 +136,7 @@ def launchMatch(element: WebElement):
 # Starts capturing network traffic on the ethernet port
 def captureTraffic(iteration: int):
   # Calls tshark in the command prompt
-  subprocess.run("tshark -i " + INTERFACE + " -w " + CAPTURE_PATH + iteration + ".pcap" + " -a duration:" + CAPTURE_LENGTH)
+  subprocess.run("tshark -i " + INTERFACE + " -w " + CAPTURE_PATH + str(iteration) + ".pcap" + " -a duration:" + CAPTURE_LENGTH)
 
 # Holds forwards and left at the same time to steer left
 def steerLeft():
@@ -233,7 +234,7 @@ def closeGame(element: WebElement):
 
 #-------------------------------- Execution ---------------------------------------- 
 
-for i in range(10):
+for i in range(1, 11):
   # Loads my chrome profile, so that GFN doesn't require login
   options = webdriver.ChromeOptions() 
   options.add_argument("user-data-dir=" + PROFILE_PATH) 
@@ -252,7 +253,7 @@ for i in range(10):
 
   # Creates seperate threads for driving the car and capturing network traffic 
   gamePlay = threading.Thread(target=driveCar)
-  dataCollection = threading.Thread(target=captureTraffic, args=(i))
+  dataCollection = threading.Thread(target=captureTraffic, args=[i])
 
   # Runs both threads concurrently
   gamePlay.start()
