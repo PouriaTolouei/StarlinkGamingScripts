@@ -163,7 +163,7 @@ def boostForward():
 # Drives the car around in the match
 def driveCar():
   # Moves the car closer to the middle
-  holdKey('w', driver, 2)
+  holdKey('w', driver, 1.8)
 
   # Drives in a loop in both directions (4 times each)
   for i in range (4):
