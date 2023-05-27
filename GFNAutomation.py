@@ -135,13 +135,13 @@ def launchMatch(element: WebElement):
 
 # Starts capturing network traffic on the ethernet port
 def captureTraffic(iteration: int):
-  
   # Creates a new folder for each set of tests
-  path = Unique.CAPTURE_PATH + "1\\"
-  if i == 1:
+
+  if i == 1:    
+    global testNum 
     testNum = 1
     succesfullyCreated = False
-    
+
     while not succesfullyCreated:
       try:
         os.mkdir(Unique.CAPTURE_PATH + str(testNum))
@@ -149,6 +149,9 @@ def captureTraffic(iteration: int):
         path = Unique.CAPTURE_PATH + str(testNum) + "\\"
       except FileExistsError:
         testNum += 1
+  else:
+     path = Unique.CAPTURE_PATH + str(testNum) + "\\"
+
 
   # Calls tshark in the command prompt
   subprocess.run("tshark -i " + INTERFACE + " -w " + path + "Capture" + str(iteration) + ".pcap" + " -a duration:" + CAPTURE_LENGTH)
