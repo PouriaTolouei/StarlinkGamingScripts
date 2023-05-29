@@ -16,8 +16,40 @@ INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
 PLAYER_TYPE = Unique.PLAYER_TYPE
+metrics = []
 
 #-------------------------------- Methods ---------------------------------------- 
+
+
+def metricCollection(driver, metrics):
+  timeList = []
+  streamFPSList = []
+  pingList = []
+  frameLossList = []
+  packetLossList = []
+  resolutionList = []
+
+
+  timeout = 35
+  timeout_start = time.time()
+
+  while time.time() < timeout_start + timeout:
+      sec = time.time() - timeout_start
+      streamFPS = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[2]/span')
+      ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
+      frameLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[1]')
+      packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
+      resolution = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[5]/div/span')
+
+      timeList.append(sec)
+      streamFPSList.append(streamFPS.text)
+      pingList.append(ping.text)
+      frameLossList.append(frameLoss.text)
+      packetLossList.append(packetLoss.text)
+      resolutionList.append(resolution.text)
+
+      metrics.append([timeList, streamFPSList, pingList, frameLossList, packetLossList, resolutionList])
+
 
 # Send a raw command via the devtools protocol
 def dispatchKeyEvent(driver, name, options = {}):
@@ -249,7 +281,7 @@ def closeGame(element: WebElement):
 
 #-------------------------------- Execution ---------------------------------------- 
 
-for i in range(1, 11):
+for i in range(0, 1):
   # Loads my chrome profile, so that GFN doesn't require login
   options = webdriver.ChromeOptions() 
   options.add_argument("user-data-dir=" + PROFILE_PATH) 
@@ -257,6 +289,10 @@ for i in range(1, 11):
 
   # Launches the game and match
   element = launchGame(driver=driver)
+
+  time.sleep(KEY_DELAY)
+  element.send_keys("n")
+
   launchMatch(element=element)
 
   if PLAYER_TYPE == 'host':
@@ -268,15 +304,21 @@ for i in range(1, 11):
 
   # Creates seperate threads for driving the car and capturing network traffic 
   gamePlay = threading.Thread(target=driveCar)
-  dataCollection = threading.Thread(target=captureTraffic, args=[i])
+  dataCollection = threading.Thread(target=captureTraffic, args=[i + 1])
+  metricCollection = threading.Thread(target=metricCollection, args=(driver, metrics))
 
   # Runs both threads concurrently
   gamePlay.start()
   dataCollection.start()
+  metricCollection.start()
 
   # Wait for the execution of the threads to complete before the rest of the program executes
   gamePlay.join()
   dataCollection.join()
+  metricCollection.join()
+
+  print(metrics[i])
+
 
   time.sleep(5)
 
