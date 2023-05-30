@@ -286,6 +286,9 @@ def closeGame(element: WebElement):
 #-------------------------------- Execution ---------------------------------------- 
 
 for i in range(1, NUM_TESTS + 1):
+  # Resets the metrics array
+  metrics = []
+  
   # Loads my chrome profile, so that GFN doesn't require login
   options = webdriver.ChromeOptions() 
   options.add_argument("user-data-dir=" + PROFILE_PATH) 
