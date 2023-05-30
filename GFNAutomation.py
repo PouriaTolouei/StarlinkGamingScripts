@@ -1,5 +1,5 @@
 import Unique
-import json, time, subprocess, threading, os
+import json, time, subprocess, threading, os, csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
 
-#----------------------------- Constants  --------------------------------------- 
+#------------------------- Variables and Constants  ------------------------------ 
 
 KEY_DELAY = 0.5
 CAPTURE_LENGTH = "35"
@@ -16,40 +16,10 @@ INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
 PLAYER_TYPE = Unique.PLAYER_TYPE
+FIELDS = ["Time", "Stream FPS", "Ping", "Frame Loss", "Packet Loss", "Resolution"]
 metrics = []
 
 #-------------------------------- Methods ---------------------------------------- 
-
-
-def metricCollection(driver, metrics):
-  timeList = []
-  streamFPSList = []
-  pingList = []
-  frameLossList = []
-  packetLossList = []
-  resolutionList = []
-
-
-  timeout = 35
-  timeout_start = time.time()
-
-  while time.time() < timeout_start + timeout:
-      sec = time.time() - timeout_start
-      streamFPS = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[2]/span')
-      ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
-      frameLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[1]')
-      packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
-      resolution = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[5]/div/span')
-
-      timeList.append(sec)
-      streamFPSList.append(streamFPS.text)
-      pingList.append(ping.text)
-      frameLossList.append(frameLoss.text)
-      packetLossList.append(packetLoss.text)
-      resolutionList.append(resolution.text)
-
-      metrics.append([timeList, streamFPSList, pingList, frameLossList, packetLossList, resolutionList])
-
 
 # Send a raw command via the devtools protocol
 def dispatchKeyEvent(driver, name, options = {}):
@@ -168,25 +138,55 @@ def launchMatch(element: WebElement):
 # Starts capturing network traffic on the ethernet port
 def captureTraffic(iteration: int):
   # Creates a new folder for each set of tests
-
+  # Checks to see if the folder exists only for the first test in a set
   if i == 1:    
-    global testNum 
-    testNum = 1
+    global setNum 
+    setNum = 1
     succesfullyCreated = False
 
+    # Keeps trying to create a folder until it doesn't exist
     while not succesfullyCreated:
       try:
-        os.mkdir(Unique.CAPTURE_PATH + str(testNum))
+        os.mkdir(Unique.CAPTURE_PATH + str(setNum))
         succesfullyCreated = True
-        path = Unique.CAPTURE_PATH + str(testNum) + "\\"
+        path = Unique.CAPTURE_PATH + str(setNum) + "\\"
       except FileExistsError:
-        testNum += 1
+        setNum += 1
   else:
-     path = Unique.CAPTURE_PATH + str(testNum) + "\\"
+     path = Unique.CAPTURE_PATH + str(setNum) + "\\"
 
 
   # Calls tshark in the command prompt
   subprocess.run("tshark -i " + INTERFACE + " -w " + path + "Capture" + str(iteration) + ".pcap" + " -a duration:" + CAPTURE_LENGTH)
+
+
+# Collects in-game network metrics from GFN overlay 
+def metricCollection(driver, metrics):
+  timeout = int(CAPTURE_LENGTH) # duration of gameplay
+  timeout_start = time.time() # Keeps track of the starting time
+
+  while time.time() < timeout_start + timeout:
+      metric = [] # stores all the metrics for each interval
+
+      sec = time.time() - timeout_start # seconds passed since the start of collection
+      
+      # Locates all the web elements where the metric are displayed
+      streamFPS = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[2]/span')
+      ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
+      frameLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[1]')
+      packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
+      resolution = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[5]/div/span')
+
+      # Adds them to the list
+      metric.append(sec)
+      metric.append(streamFPS.text)
+      metric.append(ping.text)
+      metric.append(frameLoss.text)
+      metric.append(packetLoss.text)
+      metric.append(resolution.text)
+
+      # Adds the metrics of each interval to the list of all the intervals
+      metrics.append(metric)
 
 # Holds forwards and left at the same time to steer left
 def steerLeft():
@@ -284,7 +284,7 @@ def closeGame(element: WebElement):
 
 #-------------------------------- Execution ---------------------------------------- 
 
-for i in range(0, 1):
+for i in range(1, 2):
   # Loads my chrome profile, so that GFN doesn't require login
   options = webdriver.ChromeOptions() 
   options.add_argument("user-data-dir=" + PROFILE_PATH) 
@@ -307,7 +307,7 @@ for i in range(0, 1):
 
   # Creates seperate threads for driving the car and capturing network traffic 
   gamePlay = threading.Thread(target=driveCar)
-  dataCollection = threading.Thread(target=captureTraffic, args=[i + 1])
+  dataCollection = threading.Thread(target=captureTraffic, args=[i])
   metricCollection = threading.Thread(target=metricCollection, args=(driver, metrics))
 
   # Runs both threads concurrently
@@ -320,8 +320,11 @@ for i in range(0, 1):
   dataCollection.join()
   metricCollection.join()
 
-  print(metrics[i])
-
+  # Writes the metrics to a CSV file
+  with open(Unique.CAPTURE_PATH + str(setNum) + "\\" + "Metrics" + str(i) + ".csv", 'w') as f:
+    write = csv.writer(f)
+    write.writerow(FIELDS)
+    write.writerows(metrics)
 
   time.sleep(5)
 
