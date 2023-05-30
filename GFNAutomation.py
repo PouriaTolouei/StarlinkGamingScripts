@@ -10,6 +10,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 
 #------------------------- Variables and Constants  ------------------------------ 
 
+NUM_TESTS = 3
 KEY_DELAY = 0.5
 CAPTURE_LENGTH = "35"
 INTERFACE = Unique.INTERFACE
@@ -161,7 +162,7 @@ def captureTraffic(iteration: int):
 
 
 # Collects in-game network metrics from GFN overlay 
-def metricCollection(driver, metrics):
+def captureMetrics(driver, metrics):
   timeout = int(CAPTURE_LENGTH) # duration of gameplay
   timeout_start = time.time() # Keeps track of the starting time
 
@@ -284,7 +285,7 @@ def closeGame(element: WebElement):
 
 #-------------------------------- Execution ---------------------------------------- 
 
-for i in range(1, 2):
+for i in range(1, NUM_TESTS + 1):
   # Loads my chrome profile, so that GFN doesn't require login
   options = webdriver.ChromeOptions() 
   options.add_argument("user-data-dir=" + PROFILE_PATH) 
@@ -308,7 +309,7 @@ for i in range(1, 2):
   # Creates seperate threads for driving the car and capturing network traffic 
   gamePlay = threading.Thread(target=driveCar)
   dataCollection = threading.Thread(target=captureTraffic, args=[i])
-  metricCollection = threading.Thread(target=metricCollection, args=(driver, metrics))
+  metricCollection = threading.Thread(target=captureMetrics, args=(driver, metrics))
 
   # Runs both threads concurrently
   gamePlay.start()
@@ -321,7 +322,7 @@ for i in range(1, 2):
   metricCollection.join()
 
   # Writes the metrics to a CSV file
-  with open(Unique.CAPTURE_PATH + str(setNum) + "\\" + "Metrics" + str(i) + ".csv", 'w') as f:
+  with open(Unique.CAPTURE_PATH + str(setNum) + "\\" + "Metrics" + str(i) + ".csv", 'w', newline='') as f:
     write = csv.writer(f)
     write.writerow(FIELDS)
     write.writerows(metrics)
