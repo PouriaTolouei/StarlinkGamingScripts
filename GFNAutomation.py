@@ -10,14 +10,14 @@ from selenium.webdriver.remote.webdriver import WebDriver
 
 #------------------------- Variables and Constants  ------------------------------ 
 
-NUM_TESTS = 3
+NUM_TESTS = 1
 KEY_DELAY = 0.5
-CAPTURE_LENGTH = "35"
+CAPTURE_LENGTH = "210"
 INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
 PLAYER_TYPE = Unique.PLAYER_TYPE
-FIELDS = ["Time", "Stream FPS", "Ping", "Frame Loss", "Packet Loss", "Resolution"]
+FIELDS = ["Time", "Stream FPS", "Ping", "Frame Loss", "Packet Loss",  "Available Bandwith", "Used Bandwidth", "Resolution"]
 metrics = []
 
 #-------------------------------- Methods ---------------------------------------- 
@@ -175,8 +175,12 @@ def captureMetrics(driver, metrics):
       streamFPS = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[2]/span')
       ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
       frameLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[1]')
+      frameLossTotal = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[2]')
       packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
+      packetLossTotal = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[2]')
       resolution = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[5]/div/span')
+      bandwidthAvailable = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[3]/div/span[1]')
+      bandwidthUsed = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[4]/div/span[1]')
 
       # Adds them to the list
       metric.append(sec)
@@ -184,10 +188,13 @@ def captureMetrics(driver, metrics):
       metric.append(ping.text)
       metric.append(frameLoss.text)
       metric.append(packetLoss.text)
+      metric.append(bandwidthAvailable.text)
+      metric.append(bandwidthUsed.text)
       metric.append(resolution.text)
 
       # Adds the metrics of each interval to the list of all the intervals
       metrics.append(metric)
+      time.sleep(0.8)
 
 # Holds forwards and left at the same time to steer left
 def steerLeft():
@@ -222,7 +229,7 @@ def driveCar():
   holdKey('w', driver, 1.8)
 
   # Drives in a loop in both directions (4 times each)
-  for i in range (4):
+  for i in range (24):
     time.sleep(0.1)
     steerLeft()
     time.sleep(0.1)
