@@ -11,7 +11,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 #------------------------- Variables and Constants  ------------------------------ 
 
 NUM_TESTS = 1
-KEY_DELAY = 0.5
+KEY_DELAY = 0.7
 CAPTURE_LENGTH = "210"
 INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
