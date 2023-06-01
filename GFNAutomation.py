@@ -194,7 +194,7 @@ def captureMetrics(driver, metrics):
 
       # Adds the metrics of each interval to the list of all the intervals
       metrics.append(metric)
-      time.sleep(0.8)
+      time.sleep(0.6)
 
 # Holds forwards and left at the same time to steer left
 def steerLeft():
