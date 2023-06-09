@@ -202,7 +202,7 @@ def captureAction(measurements):
 
     # Keeps looking for pixel color change
     while True:
-        pixel = pyautogui.pixel(957,1024) # Pixel in the exhaust
+        pixel = pyautogui.pixel(Unique.EXHAUST_POS_X, Unique.EXHAUST_POS_Y) # Pixel in the exhaust
 
         # Checks to see if the pixel has become more red to confirm boost action 
         # or times out after 1 second
