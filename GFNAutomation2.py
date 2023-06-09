@@ -12,7 +12,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 
 NUM_TESTS = 1
 KEY_DELAY = 0.7
-CAPTURE_LENGTH = "90"
+CAPTURE_LENGTH = "120"
 INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
@@ -202,7 +202,7 @@ def captureAction(measurements):
 
     # Keeps looking for pixel color change
     while True:
-        pixel = pyautogui.pixel(957,1006) # Pixel in the exhaust
+        pixel = pyautogui.pixel(957,1024) # Pixel in the exhaust
 
         # Checks to see if the pixel has become more red to confirm boost action 
         # or times out after 1 second
@@ -351,18 +351,9 @@ for i in range(1, NUM_TESTS + 1):
 
 # while True:
 #     x, y = pyautogui.position()
-#     # pixel = pyautogui.pixel(x, y)
-#     pixel = pyautogui.pixel(957, 1006)
-#     print(str(x) + ',' + str(y))
-#     print(pixel)
-    
-
-    # Get color of the pixel (rgb) in the x,y of the cursor
-
     # pixel = pyautogui.pixel(957,1006)
 
     # if pixel[0] > 200:
-    #     print(pixel)
     #     print("boost used")
 
     # print("Position")
