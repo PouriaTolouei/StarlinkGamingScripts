@@ -18,7 +18,7 @@ PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
 PLAYER_TYPE = Unique.PLAYER_TYPE
 FIELDS = ["Time", "Stream FPS", "Ping", "Frame Loss", "Packet Loss", "Used Bandwidth", "Resolution"]
-FIELDS2 = ["Time",  "Input Latency"]
+FIELDS2 = ["Time",  "Ping", "Input Latency"]
 metrics = []
 
 #-------------------------------- Methods ---------------------------------------- 
@@ -213,7 +213,11 @@ def captureAction(measurements):
             break
 
 # Boosts the car and captures the time the key was pressed
-def boost(measurements):
+def boost(driver, measurements):
+   # Collects the ping corresponding to the key press
+   ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
+   measurements.append(ping.text)
+
    holdKey('x', driver, 0.07) # Presses the boost key for the average key press time
    
    # Captures the time
@@ -221,29 +225,32 @@ def boost(measurements):
    measurements.append(key_time)
 
 # Drives the car around in the match
-def driveCar(inputLatency):
+def driveCar(driver, inputLatency):
   timeout = int(CAPTURE_LENGTH) # duration of gameplay
   startTime = time.time() # Keeps track of the starting time
 
   while time.time() < startTime + timeout:
       measurements = [] # Keeps track of the input latency measurements
+      
+      # Boosts the car and measures and records key press and action timestamps
+      move =  threading.Thread(target= boost, args=[driver, measurements])
+      capture = threading.Thread(target= captureAction, args=[measurements])
+
       sec = time.time() - startTime # seconds passed since the start of input latency collection
       measurements.append(sec)
-
-      # Boosts the car and measures and records key press and action timestamps
-      move =  threading.Thread(target= boost, args=[measurements])
-      capture = threading.Thread(target= captureAction, args=[measurements])
+     
       move.start()
       capture.start()
       move.join()
       capture.join()
-      
+
+     
       # Calculates input latency (action time - key press time)
-      measurements.append((measurements[2] - measurements[1]) * 1000)
+      measurements.append((measurements[3] - measurements[2]) * 1000)
 
       # Removes the timestamps as they are not relevant for analysis
-      measurements.pop(1)
-      measurements.pop(1)
+      measurements.pop(2)
+      measurements.pop(2)
 
       inputLatency.append(measurements)
 
@@ -311,7 +318,7 @@ for i in range(1, NUM_TESTS + 1):
     time.sleep(7)
 
   # Creates seperate threads for driving the car and capturing network traffic 
-  gamePlay = threading.Thread(target=driveCar, args=[inputLatency])
+  gamePlay = threading.Thread(target=driveCar, args=[driver, inputLatency])
   dataCollection = threading.Thread(target=captureTraffic, args=[i])
   metricCollection = threading.Thread(target=captureMetrics, args=(driver, metrics))
 
