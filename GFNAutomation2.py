@@ -205,8 +205,8 @@ def captureAction(measurements):
         pixel = pyautogui.pixel(Unique.EXHAUST_POS_X, Unique.EXHAUST_POS_Y) # Pixel in the exhaust
 
         # Checks to see if the pixel has become more red to confirm boost action 
-        # or times out after 1 second
-        if (pixel[0] > 200) or (time.time() - start_time) >= 1:
+        # or times out after 0.5 second
+        if (pixel[0] > 200) or (time.time() - start_time) >= 0.5:
             # Captures the time
             action_time = time.time()
             measurements.append(action_time)
@@ -233,16 +233,14 @@ def driveCar(driver, inputLatency):
       measurements = [] # Keeps track of the input latency measurements
       
       # Boosts the car and measures and records key press and action timestamps
-      move =  threading.Thread(target= boost, args=[driver, measurements])
-      capture = threading.Thread(target= captureAction, args=[measurements])
+      # move =  threading.Thread(target= boost, args=[driver, measurements])
+      # capture = threading.Thread(target= captureAction, args=[measurements])
 
       sec = time.time() - startTime # seconds passed since the start of input latency collection
       measurements.append(sec)
      
-      move.start()
-      capture.start()
-      move.join()
-      capture.join()
+      boost(driver, measurements)
+      captureAction(measurements)
 
      
       # Calculates input latency (action time - key press time)
@@ -255,7 +253,7 @@ def driveCar(driver, inputLatency):
       inputLatency.append(measurements)
 
       # Waits for the boost effect to fade away
-      time.sleep(1)
+      time.sleep(1.25)
 
 
 def closeGame(element: WebElement):
