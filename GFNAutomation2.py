@@ -206,7 +206,7 @@ def captureAction(measurements):
 
         # Checks to see if the pixel has become more red to confirm boost action 
         # or times out after 0.5 second
-        if (pixel[0] > 200) or (time.time() - start_time) >= 0.5:
+        if (pixel[0] > 200) or (time.time() - start_time) >= 1:
             # Captures the time
             action_time = time.time()
             measurements.append(action_time)
@@ -253,7 +253,7 @@ def driveCar(driver, inputLatency):
       inputLatency.append(measurements)
 
       # Waits for the boost effect to fade away
-      time.sleep(1.25)
+      time.sleep(1.5)
 
 
 def closeGame(element: WebElement):
