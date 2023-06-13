@@ -225,7 +225,7 @@ def boost(driver, measurements):
    ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
    packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
    measurements.append(int(ping.text))
-   measurements.append(int(packetLoss))
+   measurements.append(int(packetLoss.text))
    
 
 
@@ -364,10 +364,9 @@ for i in range(1, NUM_TESTS + 1):
   plt.yticks(range(0, 300, 50))
   plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
   plt.xlabel("Time (s)")
-  plt.ylabel("Latency (ms)")
-  plt.plot(inputLatency[0], inputLatency[1], '-o', label="Ping")
+  plt.plot(inputLatency[0], inputLatency[1], '-o', label="Ping (ms)")
+  plt.plot(inputLatency[0], inputLatency[3], '-o', label="Input Latency (ms)")
   plt.plot(inputLatency[0], inputLatency[2], '-o', label="Packet Loss")
-  plt.plot(inputLatency[0], inputLatency[3], '-o', label="Input Latency")
   plt.legend(loc="upper left")
   plt.savefig(testFolder + "Latencies" + str(i) + ".jpg")
 
