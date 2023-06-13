@@ -7,6 +7,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
+import matplotlib.pyplot as plt
+from matplotlib.category import UnitData
 
 #------------------------- Variables and Constants  ------------------------------ 
 
@@ -17,8 +19,8 @@ INTERFACE = Unique.INTERFACE
 PROFILE_PATH = Unique.PROFILE_PATH
 CAPTURE_PATH = Unique.CAPTURE_PATH
 PLAYER_TYPE = Unique.PLAYER_TYPE
-FIELDS = ["Time", "Stream FPS", "Ping", "Frame Loss", "Packet Loss", "Used Bandwidth", "Resolution"]
-FIELDS2 = ["Time",  "Ping", "Input Latency"]
+FIELDS = ["Time", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution"]
+FIELDS2 = ["Time",  "Ping", "Packet Loss", "Input Latency"]
 metrics = []
 
 #-------------------------------- Methods ---------------------------------------- 
@@ -137,7 +139,7 @@ def launchMatch(element: WebElement):
   time.sleep(KEY_DELAY)
   element.send_keys(Keys.ENTER)
 
-# Starts capturing network traffic on the ethernet port
+# Starts capturing network traffic and creates the test folder
 def captureTraffic(iteration: int):
   # Creates a new folder for each set of tests
   # Checks to see if the folder exists only for the first test in a set
@@ -175,7 +177,7 @@ def captureMetrics(driver, metrics):
       # Locates all the web elements where the metric are displayed
       streamFPS = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[2]/span')
       ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
-      frameLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[1]')
+      # frameLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[1]')
       # frameLossTotal = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[2]')
       packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
       # packetLossTotal = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[2]')
@@ -185,11 +187,10 @@ def captureMetrics(driver, metrics):
 
       # Adds them to the list
       metric.append(sec)
-      metric.append(streamFPS.text)
-      metric.append(ping.text)
-      metric.append(frameLoss.text)
-      metric.append(packetLoss.text)
-      metric.append(bandwidthUsed.text)
+      metric.append(int(streamFPS.text))
+      metric.append(int(ping.text))
+      metric.append(int(packetLoss.text))
+      metric.append(int(bandwidthUsed.text))
       metric.append(resolution.text)
 
       # Adds the metrics of each interval to the list of all the intervals
@@ -214,15 +215,19 @@ def captureAction(measurements):
 
 # Boosts the car and captures the time the key was pressed
 def boost(driver, measurements):
-   # Collects the ping corresponding to the key press
-   ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
-   measurements.append(ping.text)
-
    holdKey('x', driver, 0.07) # Presses the boost key for the average key press time
    
    # Captures the time
    key_time = time.time() 
    measurements.append(key_time)
+
+   # Collects the ping corresponding to the key press
+   ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
+   packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
+   measurements.append(int(ping.text))
+   measurements.append(int(packetLoss))
+   
+
 
 # Drives the car around in the match
 def driveCar(driver, inputLatency):
@@ -244,11 +249,11 @@ def driveCar(driver, inputLatency):
 
      
       # Calculates input latency (action time - key press time)
-      measurements.append((measurements[3] - measurements[2]) * 1000)
+      measurements.append((measurements[4] - measurements[1]) * 1000)
 
       # Removes the timestamps as they are not relevant for analysis
-      measurements.pop(2)
-      measurements.pop(2)
+      measurements.pop(4)
+      measurements.pop(1)
 
       inputLatency.append(measurements)
 
@@ -287,7 +292,6 @@ def closeGame(element: WebElement):
    time.sleep(15)
 
 #-------------------------------- Execution ---------------------------------------- 
-
 for i in range(1, NUM_TESTS + 1):
   # Resets the metrics array
   metrics = []
@@ -330,14 +334,16 @@ for i in range(1, NUM_TESTS + 1):
   dataCollection.join()
   metricCollection.join()
 
+  testFolder = Unique.CAPTURE_PATH + str(setNum) + "\\"
+
   # Writes the metrics to a CSV file
-  with open(Unique.CAPTURE_PATH + str(setNum) + "\\" + "Metrics" + str(i) + ".csv", 'w', newline='') as f:
+  with open(testFolder + "Metrics" + str(i) + ".csv", 'w', newline='') as f:
     write = csv.writer(f)
     write.writerow(FIELDS)
     write.writerows(metrics)
 
   # Writes the input latency data to a CSV file
-  with open(Unique.CAPTURE_PATH + str(setNum) + "\\" + "InputLatencies" + str(i) + ".csv", 'w', newline='') as f:
+  with open(testFolder + "Latencies" + str(i) + ".csv", 'w', newline='') as f:
     write = csv.writer(f)
     write.writerow(FIELDS2)
     write.writerows(inputLatency)
@@ -347,10 +353,43 @@ for i in range(1, NUM_TESTS + 1):
 
   # Closes the game
   closeGame(element=element)
-
+ 
   # Closes the automation session
   driver.close()
+  
+  # Creates the latency graphs
+  inputLatency = list(zip(*inputLatency))
+  plt.figure(figsize=(21,11))
+  plt.ylim(0, 300)
+  plt.yticks(range(0, 300, 50))
+  plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
+  plt.xlabel("Time (s)")
+  plt.ylabel("Latency (ms)")
+  plt.plot(inputLatency[0], inputLatency[1], '-o', label="Ping")
+  plt.plot(inputLatency[0], inputLatency[2], '-o', label="Packet Loss")
+  plt.plot(inputLatency[0], inputLatency[3], '-o', label="Input Latency")
+  plt.legend(loc="upper left")
+  plt.savefig(testFolder + "Latencies" + str(i) + ".jpg")
 
+  # Creates the metrics graph
+  resolutionLabels = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
+  metrics = list(zip(*metrics))
+  plt.figure(figsize=(21,11))
+  plt.ylim(0, 300)
+  plt.yticks(range(0, 300, 50))
+  plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
+  plt.xlabel("Time (s)")
+  plt.plot(metrics[0], metrics[1], '-o', label="Stream FPS")
+  plt.plot(metrics[0], metrics[2], '-o', label="Ping (ms)")
+  plt.plot(metrics[0], metrics[3], '-o', label="Packet Loss")
+  plt.plot(metrics[0], metrics[4], '-o', label="Used Bandwidth (Mbps)")
+  plt.legend(loc="upper left")
+  SecondaryYAxis = plt.twinx()
+  SecondaryYAxis.set_ylim(-1,6)
+  SecondaryYAxis.set_ylabel("Resolution")
+  plt.plot(metrics[0], metrics[5], '-o', label="Resolution", yunits=UnitData(resolutionLabels), color="black")
+  plt.legend(loc="upper right")
+  plt.savefig(testFolder + "Metrics" + str(i) + ".jpg")
 
 # Pixel location diagnosis
 

@@ -2,3 +2,4 @@ Unique.py
 *.pcap
 __pycache__
 *.csv
+*.jpg
