@@ -362,6 +362,8 @@ options.add_experimental_option("useAutomationExtension", False)
 options.add_experimental_option("excludeSwitches", ["enable-automation"]) 
 # options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(options=options)
+# Makes sure the window is maximized
+driver.maximize_window()
 
 # Launches the game and match
 element = launchGame()
