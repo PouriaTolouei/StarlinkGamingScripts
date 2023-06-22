@@ -1,4 +1,3 @@
-import Unique
 import json, time, subprocess, threading, os, csv, gi
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -9,8 +8,6 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
 import matplotlib.pyplot as plt
 from matplotlib.category import UnitData
-gi.require_version('Gdk', '3.0')
-from gi.repository import Gdk
 from pyvirtualdisplay import Display
 from mss import mss
 from PIL import Image
@@ -21,12 +18,16 @@ from PIL import Image
 
 KEY_DELAY = 0.7
 CAPTURE_LENGTH = "120"
-INTERFACE = Unique.INTERFACE
-PROFILE_PATH = Unique.PROFILE_PATH
-CAPTURE_PATH = Unique.CAPTURE_PATH
-PLAYER_TYPE = Unique.PLAYER_TYPE
 FIELDS = ["Time", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution"]
 FIELDS2 = ["Time",  "Ping", "Packet Loss", "Input Latency"]
+
+INTERFACE = "enp2s0"
+
+PROFILE_PATH = "/home/pouriatolouei/.config/google-chrome/"
+CAPTURE_PATH = "/home/pouriatolouei/Documents/StarLinkGamingScripts/"
+PLAYER_TYPE = "host"
+EXHAUST_POS_X = 960
+EXHAUST_POS_Y = 965
 
 #-------------------------------- Methods ---------------------------------------- 
 
@@ -161,9 +162,9 @@ def captureTraffic():
 
   while not succesfullyCreated:
     try:
-      os.mkdir(Unique.CAPTURE_PATH + str(roundNum))
+      os.mkdir(CAPTURE_PATH + str(roundNum))
       succesfullyCreated = True
-      path = Unique.CAPTURE_PATH + str(roundNum) + "/"
+      path = CAPTURE_PATH + str(roundNum) + "/"
     except FileExistsError:
       roundNum += 1
  
@@ -209,10 +210,10 @@ def captureAction(measurements):
     captured = False
     # Keeps looking for pixel color change
     while not captured:
-        # pixbuf = Gdk.pixbuf_get_from_window(Gdk.get_default_root_window(), Unique.EXHAUST_POS_X, Unique.EXHAUST_POS_Y, 1, 1)
+        # pixbuf = Gdk.pixbuf_get_from_window(Gdk.get_default_root_window(), EXHAUST_POS_X, EXHAUST_POS_Y, 1, 1)
         # pixel = tuple(pixbuf.get_pixels())
-        # pixel = pyautogui.pixel(Unique.EXHAUST_POS_X, Unique.EXHAUST_POS_Y) # Pixel in the exhaust
-        pixel = capture_screenshot().getpixel((Unique.EXHAUST_POS_X, Unique.EXHAUST_POS_Y))
+        # pixel = pyautogui.pixel(EXHAUST_POS_X, EXHAUST_POS_Y) # Pixel in the exhaust
+        pixel = capture_screenshot().getpixel((EXHAUST_POS_X, EXHAUST_POS_Y))
 
         # Checks to see if the pixel has become more red to confirm boost action 
         # or times out after 0.5 second
@@ -348,7 +349,7 @@ def createMetricsGraph(metrics):
 
 #-------------------------------- Execution ---------------------------------------- 
 # Sets up a virual display
-display = Display(visible= False, size=(1280, 1024), use_xauth=True)
+display = Display(visible= False, size=(1920, 1080), use_xauth=True)
 display.start()
 
 # Resets the metrics array
@@ -396,7 +397,7 @@ gamePlay.join()
 dataCollection.join()
 metricCollection.join()
 
-testFolder = Unique.CAPTURE_PATH + str(roundNum) + "/"
+testFolder = CAPTURE_PATH + str(roundNum) + "/"
 
 # Waits for the gameplay to settle down
 time.sleep(5)
