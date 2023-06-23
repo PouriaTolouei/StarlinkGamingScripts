@@ -1,4 +1,4 @@
-import json, time, subprocess, threading, os, csv, gi
+import json, time, subprocess, threading, os, csv, sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -17,7 +17,7 @@ from PIL import Image
 #------------------------- Variables and Constants  ------------------------------ 
 
 KEY_DELAY = 0.7
-CAPTURE_LENGTH = "120"
+CAPTURE_LENGTH = "30"
 FIELDS = ["Time", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution"]
 FIELDS2 = ["Time",  "Ping", "Packet Loss", "Input Latency"]
 
@@ -25,7 +25,7 @@ INTERFACE = "enp2s0"
 
 PROFILE_PATH = "/home/pouriatolouei/.config/google-chrome/"
 CAPTURE_PATH = "/home/pouriatolouei/Documents/StarLinkGamingScripts/"
-PLAYER_TYPE = "host"
+PLAYER_TYPE = sys.argv[1]
 EXHAUST_POS_X = 960
 EXHAUST_POS_Y = 965
 
@@ -210,9 +210,7 @@ def captureAction(measurements):
     captured = False
     # Keeps looking for pixel color change
     while not captured:
-        # pixbuf = Gdk.pixbuf_get_from_window(Gdk.get_default_root_window(), EXHAUST_POS_X, EXHAUST_POS_Y, 1, 1)
-        # pixel = tuple(pixbuf.get_pixels())
-        # pixel = pyautogui.pixel(EXHAUST_POS_X, EXHAUST_POS_Y) # Pixel in the exhaust
+        # Captures pixel inside the car exhaust
         pixel = capture_screenshot().getpixel((EXHAUST_POS_X, EXHAUST_POS_Y))
 
         # Checks to see if the pixel has become more red to confirm boost action 
