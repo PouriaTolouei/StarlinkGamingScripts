@@ -313,8 +313,8 @@ def exportLatenciesData():
 def createLatenciesGraph(inputLatency):
   inputLatency = list(zip(*inputLatency))
   plt.figure(figsize=(21,11))
-  plt.ylim(0, 250)
-  plt.yticks(range(0, 250, 50))
+  plt.ylim(0, 350)
+  plt.yticks(range(0, 350, 50))
   plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
   plt.xlabel("Time (s)")
   plt.plot(inputLatency[0], inputLatency[1], '-o', label="Ping (ms)")
@@ -402,7 +402,7 @@ time.sleep(5)
 
 # Captures screenshot for troubleshooting
 img = capture_screenshot()
-img.save("image.png")
+img.save(testFolder + "Screenshot" + str(roundNum) + ".png")
 
 # Closes the game
 closeGame()
