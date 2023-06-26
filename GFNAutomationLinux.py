@@ -16,7 +16,7 @@ from PIL import Image
 
 #------------------------- Variables and Constants  ------------------------------ 
 
-KEY_DELAY = 0.7
+KEY_DELAY = 1
 CAPTURE_LENGTH = "120"
 FIELDS = ["Time", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution"]
 FIELDS2 = ["Time",  "Ping", "Packet Loss", "Input Latency"]
