@@ -1,6 +1,7 @@
 import matplotlib, csv, os, statistics
 import matplotlib.pyplot as plt
 
+NONE = -1
 AVERAGE = 0
 DEVIATION = 1
 
@@ -8,11 +9,13 @@ PING = 1
 PACKETLOSS = 2
 INPUTLATENCY = 3
 
-pingStats = [[], [], []]
+pings = []
+packetLosses = []
+inputLatencies = []
 
-packetLossStats = [[], [], []]
-
-inputLatencyStats = [[], [], []]
+pingStats = [[], []]
+packetLossStats = [[], []]
+inputLatencyStats = [[], []]
 
 def storeStats(stats, metrics):
     stats[0].append(statistics.mean(metrics))
@@ -22,7 +25,10 @@ def graphBoxPlot(stats, statType, yLabel, fileName, min, max, step):
     plt.figure(figsize =(20, 14))
     plt.ylim(min, max)
     plt.yticks(range(min, max, step))
-    plt.boxplot(stats[statType])
+    if statType == NONE:
+        plt.boxplot(stats)
+    else:
+        plt.boxplot(stats[statType])
     plt.ylabel(yLabel)
     plt.savefig(fileName + ".jpg")
 
@@ -31,10 +37,6 @@ i = 1
 
 while exists:
     try:
-        pings = []
-        packetLosses = []
-        inputLatencies = []
-
         os.chdir(str(i))
         print(os.getcwd())
 
@@ -60,9 +62,11 @@ while exists:
     except FileNotFoundError:
         exists = False
 
+graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 20, 130, 10)
 graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 20, 130, 10)
 graphBoxPlot(pingStats, DEVIATION, "Ping (ms)", "PingDeviations", 0, 110, 10)
 
+graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 40, 210, 10)
 graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 40, 210, 10)
 graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
 
