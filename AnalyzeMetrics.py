@@ -1,6 +1,7 @@
 import matplotlib, csv, os, statistics
 import matplotlib.pyplot as plt
 import scapy
+from scapy.all import *
 
 NONE = -1
 AVERAGE = 0
@@ -60,9 +61,9 @@ while exists:
             storeStats(inputLatencyStats, inputLatencies)
         
         numPackets = 0
-
+        
         with open('Capture' + str(i) + '.pcap') as pcap_file:
-            for packet in scapy.PcapReader(pcap_file):
+            for packet in rdpcap(pcap_file):
                 numPackets += 1
         
         packetLossPercent.append((packetLosses[i - 1] // numPackets) * 100)
