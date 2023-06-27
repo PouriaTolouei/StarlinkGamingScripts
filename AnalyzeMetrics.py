@@ -62,12 +62,12 @@ while exists:
     except FileNotFoundError:
         exists = False
 
-graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 20, 130, 10)
-graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 20, 130, 10)
+graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 160, 10)
+graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 0, 160, 10)
 graphBoxPlot(pingStats, DEVIATION, "Ping (ms)", "PingDeviations", 0, 110, 10)
 
-graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 40, 210, 10)
-graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 40, 210, 10)
+graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
+graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
 
 # graphBoxPlot(inputLatencyStats, AVERAGE, "Packet Loss", "PacketLossAverages", -1, 11, 1)
