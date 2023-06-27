@@ -321,6 +321,7 @@ def createLatenciesGraph(inputLatency):
   plt.yticks(range(0, 350, 50))
   plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
   plt.xlabel("Time (s)")
+  plt.margins(0)
   plt.savefig(testFolder + "Latencies" + str(roundNum) + ".jpg")  
 
 
@@ -343,6 +344,7 @@ def createMetricsGraph(metrics):
   plt.yticks(range(0, 300, 50))
   plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
   plt.xlabel("Time (s)")
+  plt.margins(0)
   plt.savefig(testFolder + "Metrics" + str(roundNum) + ".jpg")
 
 #-------------------------------- Execution ---------------------------------------- 
