@@ -313,14 +313,14 @@ def exportLatenciesData():
 def createLatenciesGraph(inputLatency):
   inputLatency = list(zip(*inputLatency))
   plt.figure(figsize=(21,11))
-  plt.ylim(0, 350)
-  plt.yticks(range(0, 350, 50))
-  plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
-  plt.xlabel("Time (s)")
   plt.plot(inputLatency[0], inputLatency[1], '-o', label="Ping (ms)")
   plt.plot(inputLatency[0], inputLatency[3], '-o', label="Input Latency (ms)")
   plt.plot(inputLatency[0], inputLatency[2], '-o', label="Packet Loss")
   plt.legend(loc="upper left")
+  plt.ylim(0, 350)
+  plt.yticks(range(0, 350, 50))
+  plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
+  plt.xlabel("Time (s)")
   plt.savefig(testFolder + "Latencies" + str(roundNum) + ".jpg")  
 
 
@@ -329,10 +329,6 @@ def createMetricsGraph(metrics):
   resolutionLabels = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
   metrics = list(zip(*metrics))
   plt.figure(figsize=(21,11))
-  plt.ylim(0, 300)
-  plt.yticks(range(0, 300, 50))
-  plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
-  plt.xlabel("Time (s)")
   plt.plot(metrics[0], metrics[1], '-o', label="Stream FPS")
   plt.plot(metrics[0], metrics[2], '-o', label="Ping (ms)")
   plt.plot(metrics[0], metrics[3], '-o', label="Packet Loss")
@@ -343,6 +339,10 @@ def createMetricsGraph(metrics):
   SecondaryYAxis.set_ylabel("Resolution")
   plt.plot(metrics[0], metrics[5], '-o', label="Resolution", yunits=UnitData(resolutionLabels), color="black")
   plt.legend(loc="upper right")
+  plt.ylim(0, 300)
+  plt.yticks(range(0, 300, 50))
+  plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
+  plt.xlabel("Time (s)")
   plt.savefig(testFolder + "Metrics" + str(roundNum) + ".jpg")
 
 #-------------------------------- Execution ---------------------------------------- 
