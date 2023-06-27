@@ -18,15 +18,13 @@ def storeStats(stats, metrics):
     stats[0].append(statistics.mean(metrics))
     stats[1].append(statistics.stdev(metrics))
 
-def graphBoxPlot(stats, statType, yLabel, fileName):
-    plt.figure(figsize =(10, 7))
+def graphBoxPlot(stats, statType, yLabel, fileName, min, max, step):
+    plt.figure(figsize =(20, 14))
+    plt.ylim(min, max)
+    plt.yticks(range(min, max, step))
     plt.boxplot(stats[statType])
     plt.ylabel(yLabel)
     plt.savefig(fileName + ".jpg")
-
-def boxPlotAllStats(stats, yLabel, fileName):
-    graphBoxPlot(stats, AVERAGE, yLabel, fileName + "Averages")
-    graphBoxPlot(stats, DEVIATION, yLabel, fileName + "DEVIATIONS")
 
 exists = True
 i = 1
@@ -62,9 +60,14 @@ while exists:
     except FileNotFoundError:
         exists = False
 
-boxPlotAllStats(pingStats, "Ping (ms)", "Ping")
-boxPlotAllStats(packetLossStats, "Packet Loss", "PacketLoss")
-boxPlotAllStats(inputLatencyStats, "Input Latency (ms)", "InputLatency")
+graphBoxPlot(inputLatencyStats, AVERAGE, "Ping (ms)", "PingAverages", 20, 130, 10)
+graphBoxPlot(inputLatencyStats, DEVIATION, "Ping (ms)", "PingDeviations", 0, 110, 10)
+
+graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 40, 210, 10)
+graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
+
+# graphBoxPlot(inputLatencyStats, AVERAGE, "Packet Loss", "PacketLossAverages", -1, 11, 1)
+# graphBoxPlot(inputLatencyStats, DEVIATION, "Packet Loss", "PacketLossDeviations", 0, 110, 10)
 
 
 
