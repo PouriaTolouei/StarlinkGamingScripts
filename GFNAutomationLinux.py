@@ -372,13 +372,8 @@ element.send_keys("n")
 
 launchMatch()
 
-# Guest gets delayed to ensure that match has been creates
-if PLAYER_TYPE == 'host':
-  # Waits for the match to load
-  time.sleep(12)
-elif PLAYER_TYPE == 'guest':
-  # Waits for the match to load
-  time.sleep(7)
+# Waits for match to load
+time.sleep(12)
 
 # Creates seperate threads for driving the car and capturing network traffic 
 gamePlay = threading.Thread(target=driveCar)
