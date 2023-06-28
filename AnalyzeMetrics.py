@@ -76,7 +76,7 @@ def extractData():
                 line_count = 0
                 for row in csv_reader:
                     if line_count > 0:
-                        metricsTime.append(datetime.strptime(row[TIME], '%Y-%m-%d %H:%M:%S.%f').time())
+                        metricsTime.append(datetime.strptime(row[TIME], '%Y-%m-%d %H:%M:%S.%f'))
                         pings.append(float(row[PING]))
                         roundPings.append(float(row[PING]))
                         packetLosses.append(float(row[PACKETLOSS]))
