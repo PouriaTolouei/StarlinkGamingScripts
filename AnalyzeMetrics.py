@@ -65,7 +65,7 @@ def extractData():
                 line_count = 0
                 for row in csv_reader:
                     if line_count > 0:
-                        latenciesTime.append(datetime.strptime(row[TIME], '%m-%d-%y %H:%M:%S'))
+                        latenciesTime.append(datetime.strptime(row[TIME], '%y-%m-%d %H:%M:%S'))
                         inputLatencies.append(float(row[INPUTLATENCY]))
                         roundInputLatencies.append(float(row[INPUTLATENCY]))
                     
@@ -76,7 +76,7 @@ def extractData():
                 line_count = 0
                 for row in csv_reader:
                     if line_count > 0:
-                        metricsTime.append(datetime.strptime(row[TIME], '%H:%M:%S').time())
+                        metricsTime.append(datetime.strptime(row[TIME], '%y-%m-%d %H:%M:%S').time())
                         pings.append(float(row[PING]))
                         roundPings.append(float(row[PING]))
                         packetLosses.append(float(row[PACKETLOSS]))
