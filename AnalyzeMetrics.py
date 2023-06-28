@@ -107,13 +107,13 @@ graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDe
 
 graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 2100, 100)
 
-metricsTime = pd.to_datetime(metricsTime)
-plt.bar(metricsTime, inputLatencies)
 plt.figure(figsize=(21,11))
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+plt.plot(metricsTime, packetLosses, '-o')
 plt.legend(loc="upper left")
 plt.ylim(0, 350)
+plt.xlim(0, 122)
 plt.yticks(range(0, 350, 50))
+plt.xticks(range(0, 130, 10))
 plt.xlabel("Time")
 plt.margins(0)
 plt.savefig("PacketLoss.jpg")  
