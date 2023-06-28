@@ -65,7 +65,7 @@ def extractData():
                 line_count = 0
                 for row in csv_reader:
                     if line_count > 0:
-                        latenciesTime.append(datetime.strptime(row[TIME], '%y-%m-%d %H:%M:%S.%f'))
+                        latenciesTime.append(datetime.strptime(row[TIME], '%Y-%m-%d %H:%M:%S.%f'))
                         inputLatencies.append(float(row[INPUTLATENCY]))
                         roundInputLatencies.append(float(row[INPUTLATENCY]))
                     
