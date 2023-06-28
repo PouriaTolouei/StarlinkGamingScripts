@@ -5,12 +5,12 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.remote.webdriver import WebDriver
 import matplotlib.pyplot as plt
 from matplotlib.category import UnitData
 from pyvirtualdisplay import Display
 from mss import mss
 from PIL import Image
+from datetime import datetime
 
 
 
@@ -28,6 +28,17 @@ CAPTURE_PATH = "/home/pouriatolouei/Documents/StarLinkGamingScripts/"
 PLAYER_TYPE = sys.argv[1]
 EXHAUST_POS_X = 960
 EXHAUST_POS_Y = 965
+
+SEC = 0
+TIME = 1
+PING = 2
+PACKETLOSS = 3
+
+INPUTLATENCY = 4
+
+FPS = 4
+USEDBAND = 5
+RESOLUTION = 6
 
 #-------------------------------- Methods ---------------------------------------- 
 
@@ -180,13 +191,14 @@ def captureMetrics():
       metric = [] # stores all the metrics for each interval
 
       sec = time.time() - startTime # seconds passed since the start of collection
+      actualTime = str(datetime.time(datetime.now()))
       
       # Locates all the web elements where the metric are displayed
-      streamFPS = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[2]/span')
       ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
+      packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
+      streamFPS = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[2]/span')
       # frameLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[1]')
       # frameLossTotal = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[2]')
-      packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
       # packetLossTotal = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[2]')
       resolution = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[5]/div/span')
       # bandwidthAvailable = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[3]/div/span[1]')
@@ -194,6 +206,7 @@ def captureMetrics():
 
       # Adds them to the list
       metric.append(sec)
+      metric.append(actualTime)
       metric.append(int(streamFPS.text))
       metric.append(int(ping.text))
       metric.append(int(packetLoss.text))
@@ -245,18 +258,20 @@ def driveCar():
       measurements = [] # Keeps track of the input latency measurements
 
       sec = time.time() - startTime # seconds passed since the start of input latency collection
+      actualTime = str(datetime.time(datetime.now()))
       measurements.append(sec)
+      measurements.append(actualTime)
      
       boost(measurements)
       captureAction(measurements)
 
      
       # Calculates input latency (action time - key press time)
-      measurements.append((measurements[4] - measurements[3]) * 1000)
+      measurements.append((measurements[5] - measurements[4]) * 1000)
 
       # Removes the timestamps as they are not relevant for analysis
+      measurements.pop(5)
       measurements.pop(4)
-      measurements.pop(3)
 
       inputLatency.append(measurements)
 
@@ -313,9 +328,9 @@ def exportLatenciesData():
 def createLatenciesGraph(inputLatency):
   inputLatency = list(zip(*inputLatency))
   plt.figure(figsize=(21,11))
-  plt.plot(inputLatency[0], inputLatency[1], '-o', label="Ping (ms)")
-  plt.plot(inputLatency[0], inputLatency[3], '-o', label="Input Latency (ms)")
-  plt.plot(inputLatency[0], inputLatency[2], '-o', label="Packet Loss")
+  plt.plot(inputLatency[0], inputLatency[PING], '-o', label="Ping (ms)")
+  plt.plot(inputLatency[0], inputLatency[INPUTLATENCY], '-o', label="Input Latency (ms)")
+  plt.plot(inputLatency[0], inputLatency[PACKETLOSS], '-o', label="Packet Loss")
   plt.legend(loc="upper left")
   plt.ylim(0, 350)
   plt.xlim(0, 122)
@@ -331,10 +346,10 @@ def createMetricsGraph(metrics):
   resolutionLabels = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
   metrics = list(zip(*metrics))
   plt.figure(figsize=(21,11))
-  plt.plot(metrics[0], metrics[1], '-o', label="Stream FPS")
-  plt.plot(metrics[0], metrics[2], '-o', label="Ping (ms)")
-  plt.plot(metrics[0], metrics[3], '-o', label="Packet Loss")
-  plt.plot(metrics[0], metrics[4], '-o', label="Used Bandwidth (Mbps)")
+  plt.plot(metrics[0], metrics[PING], '-o', label="Ping (ms)")
+  plt.plot(metrics[0], metrics[PACKETLOSS], '-o', label="Packet Loss")
+  plt.plot(metrics[0], metrics[FPS], '-o', label="Stream FPS")
+  plt.plot(metrics[0], metrics[USEDBAND], '-o', label="Used Bandwidth (Mbps)")
   plt.legend(loc="upper left")
   plt.ylim(0, 300)
   plt.xlim(0, 122)
@@ -345,7 +360,7 @@ def createMetricsGraph(metrics):
   SecondaryYAxis = plt.twinx()
   SecondaryYAxis.set_ylim(-1,6)
   SecondaryYAxis.set_ylabel("Resolution")
-  plt.plot(metrics[0], metrics[5], '-o', label="Resolution", yunits=UnitData(resolutionLabels), color="black")
+  plt.plot(metrics[0], metrics[RESOLUTION], '-o', label="Resolution", yunits=UnitData(resolutionLabels), color="black")
   plt.legend(loc="upper right")
   plt.savefig(testFolder + "Metrics" + str(roundNum) + ".jpg")
 
