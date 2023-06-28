@@ -81,6 +81,8 @@ def extractData():
                         roundPings.append(float(row[PING]))
                         packetLosses.append(float(row[PACKETLOSS]))
                         roundPacketLosses.append(float(row[PACKETLOSS]))
+                    
+                    line_count += 1
             
             storeStats(pingStats, roundPings)
             storeStats(inputLatencyStats, roundInputLatencies)
