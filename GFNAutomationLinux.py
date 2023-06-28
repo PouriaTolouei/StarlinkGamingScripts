@@ -215,7 +215,7 @@ def captureMetrics():
 
       # Adds the metrics of each interval to the list of all the intervals
       metrics.append(metric)
-      time.sleep(0.7)
+      time.sleep(1)
 
 # Captures the boost action by observing pixel color change towards red in the exhaust 
 def captureAction(measurements):
