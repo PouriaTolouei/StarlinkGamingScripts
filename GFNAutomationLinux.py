@@ -207,9 +207,9 @@ def captureMetrics():
       # Adds them to the list
       metric.append(sec)
       metric.append(actualTime)
-      metric.append(int(streamFPS.text))
       metric.append(int(ping.text))
       metric.append(int(packetLoss.text))
+      metric.append(int(streamFPS.text))
       metric.append(int(bandwidthUsed.text))
       metric.append(resolution.text)
 
