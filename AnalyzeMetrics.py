@@ -46,6 +46,16 @@ def graphBoxPlot(stats, statType, yLabel, fileName, min, max, step):
     plt.ylabel(yLabel)
     plt.savefig(fileName + ".jpg")
 
+def graphDistr(metrics, fileName):
+    count, bins_count = np.histogram(metrics)
+    pdf = count / sum(count)
+    cdf = np.cumsum(pdf)
+    plt.plot(bins_count[1:], pdf, color="red", label="PDF")
+    plt.plot(bins_count[1:], cdf, label="CDF")
+    plt.legend()
+    plt.savefig(fileName + "Distr.jpg")
+    plt.margins(0)
+
 def extractData():
     exists = True
     i = 1
@@ -93,38 +103,21 @@ def extractData():
             exists = False
 
 
-
-
 extractData()
 graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 160, 10)
 graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 0, 160, 10)
 graphBoxPlot(pingStats, DEVIATION, "Ping (ms)", "PingDeviations", 0, 110, 10)
+graphDistr(pings, "Pings")
 
 graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
+graphDistr(inputLatencies, "InputLatencies")
 
 graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 2100, 100)
+graphDistr(totalPacketLosses, "TotalPacketLoss")
 
-plt.figure(figsize=(21,11))
-plt.plot(metricsTime, packetLosses, '-o')
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
-plt.legend(loc="upper left")
-plt.ylim(0, 350)
-plt.yticks(range(0, 350, 50))
-plt.xlabel("Time")
-plt.margins(0)
-plt.savefig("PacketLoss.jpg")  
-plt.clf()
 
-count, bins_count = np.histogram(inputLatencies, bins=10)
-pdf = count / sum(count)
-cdf = np.cumsum(pdf)
-plt.plot(bins_count[1:], pdf, color="red", label="PDF")
-plt.plot(bins_count[1:], cdf, label="CDF")
-plt.legend()
-plt.savefig("InputLatencyDistr")
-plt.clf()
 
 
 
