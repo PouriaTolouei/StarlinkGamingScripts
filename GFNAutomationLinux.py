@@ -88,7 +88,7 @@ def launchGame() -> WebElement:
   WebDriverWait(driver, 3600).until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".mat-focus-indicator.font-button2.text-button-icon.mat-raised-button.mat-button-base.mat-accent"))).click()
 
   # Waits until the game loads on the remote systen (usually takes around 30 seconds)
-  time.sleep(45)
+  time.sleep(50)
 
   # Locates the video stream
   element = driver.find_element(By.TAG_NAME, "video")
@@ -191,7 +191,7 @@ def captureMetrics():
       metric = [] # stores all the metrics for each interval
 
       sec = time.time() - startTime # seconds passed since the start of collection
-      actualTime = str(datetime.time(datetime.now()))
+      actualTime = str(datetime.now())
       
       # Locates all the web elements where the metric are displayed
       ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
@@ -258,7 +258,7 @@ def driveCar():
       measurements = [] # Keeps track of the input latency measurements
 
       sec = time.time() - startTime # seconds passed since the start of input latency collection
-      actualTime = str(datetime.time(datetime.now()))
+      actualTime = str(datetime.now())
       measurements.append(sec)
       measurements.append(actualTime)
      
