@@ -35,10 +35,10 @@ def storeStats(stats, metrics):
     stats[0].append(statistics.mean(metrics))
     stats[1].append(statistics.stdev(metrics))
 
-def graphBoxPlot(stats, statType, yLabel, fileName, min, max, step):
+def graphBoxPlot(stats, statType, yLabel, fileName, minm, maxm, step):
     plt.figure(figsize =(20, 14))
-    plt.ylim(min, max)
-    plt.yticks(range(min, max, step))
+    plt.ylim(minm, maxm)
+    plt.yticks(range(minm, maxm, step))
     if statType == NONE:
         plt.boxplot(stats)
     else:
@@ -47,8 +47,10 @@ def graphBoxPlot(stats, statType, yLabel, fileName, min, max, step):
     plt.savefig(fileName + ".jpg")
     plt.clf()
 
-def graphDistr(metrics, fileName):
+def graphDistr(metrics, fileName, minm, maxm, step):
     plt.figure(figsize =(20, 14))
+    plt.xlim(minm, maxm)
+    plt.xticks(range(minm, maxm, step))
     count, bins_count = np.histogram(metrics)
     pdf = count / sum(count)
     cdf = np.cumsum(pdf)
@@ -107,18 +109,18 @@ def extractData():
 
 
 extractData()
-graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 160, 10)
-graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 0, 160, 10)
+graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 260, 10)
+graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 0, 260, 10)
 graphBoxPlot(pingStats, DEVIATION, "Ping (ms)", "PingDeviations", 0, 110, 10)
-graphDistr(pings, "Pings")
+graphDistr(pings, "Pings", 0, 260, 10)
 
 graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
-graphDistr(inputLatencies, "InputLatencies")
+graphDistr(inputLatencies, "InputLatencies", 0, 260, 10)
 
-graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 2100, 100)
-graphDistr(totalPacketLosses, "TotalPacketLoss")
+graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 1000, 100)
+graphDistr(totalPacketLosses, "TotalPacketLoss", 0, 1000, 100)
 
 
 
