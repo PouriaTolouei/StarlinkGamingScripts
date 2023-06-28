@@ -61,9 +61,9 @@ while exists:
                 
                 line_count += 1
             
-            storeStats(pingStats, roundPings)
-            storeStats(inputLatencyStats, roundInputLatencies)
-            totalPacketLosses.append(sum(roundInputLatencies))
+        storeStats(pingStats, roundPings)
+        storeStats(inputLatencyStats, roundInputLatencies)
+        totalPacketLosses.append(sum(roundPacketLosses))
         
         
         os.chdir('..')
