@@ -338,7 +338,8 @@ def createLatenciesGraph(inputLatency):
   plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
   plt.xlabel("Time (s)")
   plt.margins(0)
-  plt.savefig(testFolder + "Latencies" + str(roundNum) + ".jpg")  
+  plt.savefig(testFolder + "Latencies" + str(roundNum) + ".jpg")
+  plt.clf()  
 
 
  # Creates the metrics graph
@@ -363,6 +364,7 @@ def createMetricsGraph(metrics):
   plt.plot(metrics[0], metrics[RESOLUTION], '-o', label="Resolution", yunits=UnitData(resolutionLabels), color="black")
   plt.legend(loc="upper right")
   plt.savefig(testFolder + "Metrics" + str(roundNum) + ".jpg")
+  plt.clf()
 
 #-------------------------------- Execution ---------------------------------------- 
 # Sets up a virual display

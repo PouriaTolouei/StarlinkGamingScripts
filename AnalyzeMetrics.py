@@ -45,8 +45,10 @@ def graphBoxPlot(stats, statType, yLabel, fileName, min, max, step):
         plt.boxplot(stats[statType])
     plt.ylabel(yLabel)
     plt.savefig(fileName + ".jpg")
+    plt.clf()
 
 def graphDistr(metrics, fileName):
+    plt.figure(figsize =(20, 14))
     count, bins_count = np.histogram(metrics)
     pdf = count / sum(count)
     cdf = np.cumsum(pdf)
@@ -55,6 +57,7 @@ def graphDistr(metrics, fileName):
     plt.legend()
     plt.savefig(fileName + "Distr.jpg")
     plt.margins(0)
+    plt.clf()
 
 def extractData():
     exists = True
