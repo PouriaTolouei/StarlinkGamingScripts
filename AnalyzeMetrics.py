@@ -2,7 +2,6 @@ import matplotlib, csv, os, statistics
 import matplotlib.pyplot as plt
 from datetime import datetime
 import numpy as np
-import pandas as pd    
 import matplotlib.dates as mdates
 
 
@@ -109,15 +108,14 @@ graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 2100,
 
 plt.figure(figsize=(21,11))
 plt.plot(metricsTime, packetLosses, '-o')
+plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
 plt.legend(loc="upper left")
 plt.ylim(0, 350)
-plt.xlim(0, 122)
 plt.yticks(range(0, 350, 50))
-plt.xticks(range(0, 130, 10))
 plt.xlabel("Time")
 plt.margins(0)
 plt.savefig("PacketLoss.jpg")  
-
+plt.clf()
 
 count, bins_count = np.histogram(inputLatencies, bins=10)
 pdf = count / sum(count)
@@ -126,7 +124,7 @@ plt.plot(bins_count[1:], pdf, color="red", label="PDF")
 plt.plot(bins_count[1:], cdf, label="CDF")
 plt.legend()
 plt.savefig("InputLatencyDistr")
-
+plt.clf()
 
 
 
