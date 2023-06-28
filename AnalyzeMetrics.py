@@ -57,7 +57,7 @@ while exists:
                     packetLosses.append(float(row[PACKETLOSS]))
                     roundPacketLosses.append(float(row[PACKETLOSS]))
                     inputLatencies.append(float(row[INPUTLATENCY]))
-                    roundInputLatencies(float(row[INPUTLATENCY]))
+                    roundInputLatencies.append(float(row[INPUTLATENCY]))
                 
                 line_count += 1
             
