@@ -114,17 +114,77 @@ def extractData():
 
 extractData()
 graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 260, 10)
-graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 0, 260, 10)
-graphBoxPlot(pingStats, DEVIATION, "Ping (ms)", "PingDeviations", 0, 110, 10)
+graphBoxPlot(pingStats, AVERAGE, "Average Ping (ms)", "PingAverages", 0, 260, 10)
+graphBoxPlot(pingStats, DEVIATION, "Ping Standard Deviation (ms)", "PingDeviations", 0, 110, 10)
 graphDistr(pings, "Ping (ms)", "Pings", 0, 260, 10)
 
 graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
-graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
-graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
+graphBoxPlot(inputLatencyStats, AVERAGE, "Average Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
+graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency Standard Deviation (ms)", "InputLatencyDeviations", 0, 210, 10)
 graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 
-graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 1100, 100)
-graphDistr(totalPacketLosses, "Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+
+timeSeconds = []
+for time in metricsTime:
+    timeSeconds.append(time.time().second)
+
+seconds = list(range(0, 60))
+
+totalPacketLossAtSeconds = []
+
+pingsAtSeconds = []
+averagePingAtSeconds = []
+
+inputLatenciesAtSeconds = []
+averageInputLatencyAtSecond = []
+
+for i in range (60):
+    totalPacketLossAtSeconds.append(0)
+    pingsAtSeconds.append([])
+    inputLatenciesAtSeconds.append([])
+
+for i in range(len(timeSeconds)):
+    totalPacketLossAtSeconds[timeSeconds[i]] += packetLosses[i]
+    pingsAtSeconds[timeSeconds[i]].append(pings[i])
+    inputLatenciesAtSeconds[timeSeconds[i]].append(pings[i])
+
+for i in range(len(timeSeconds)):
+    averagePingAtSeconds.append(statistics.mean(pingsAtSeconds[i]))
+    averageInputLatencyAtSecond.append(statistics.mean(inputLatenciesAtSeconds[i]))
+    
+
+plt.figure(figsize =(20, 14))
+plt.xlim(0, 60)
+plt.xticks(range(0, 60, 1))
+plt.bar(seconds, totalPacketLossAtSeconds)
+plt.xlabel("Second")
+plt.ylabel("Total Packet Loss")
+plt.savefig("totalPacketLossSeconds.jpg")
+plt.clf()
+
+plt.figure(figsize =(20, 14))
+plt.xlim(0, 60)
+plt.xticks(range(0, 60, 1))
+plt.bar(seconds, averagePingAtSeconds)
+plt.xlabel("Second")
+plt.ylabel("Average Ping (ms)")
+plt.savefig("averagePingSeconds.jpg")
+plt.clf()
+
+plt.figure(figsize =(20, 14))
+plt.xlim(0, 60)
+plt.xticks(range(0, 60, 1))
+plt.bar(seconds, averagePingAtSeconds)
+plt.xlabel("Second")
+plt.ylabel("Average Input Latency (ms)")
+plt.savefig("averageInputLatencySeconds.jpg")
+plt.clf()
+
+
+
+
 
 
 
