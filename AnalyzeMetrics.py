@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import numpy as np
 import matplotlib.dates as mdates
+from astropy.visualization import hist
 
 
 NONE = -1
@@ -47,16 +48,14 @@ def graphBoxPlot(stats, statType, yLabel, fileName, minm, maxm, step):
     plt.savefig(fileName + ".jpg")
     plt.clf()
 
-def graphDistr(metrics, fileName, minm, maxm, step):
+def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
     plt.figure(figsize =(20, 14))
     plt.xlim(minm, maxm)
     plt.xticks(range(minm, maxm, step))
-    count, bins_count = np.histogram(metrics)
-    pdf = count / sum(count)
-    cdf = np.cumsum(pdf)
-    plt.plot(bins_count[1:], pdf, color="red", label="PDF")
-    plt.plot(bins_count[1:], cdf, label="CDF")
-    plt.legend()
+    n, bins, patches = hist(metrics, bins="knuth", density=True, histtype='step', cumulative=True, label='CDF')
+    plt.legend(loc="upper left")
+    plt.xlabel(xLabel)
+    plt.ylabel('Likelihood of occurrence')
     plt.savefig(fileName + "Distr.jpg")
     plt.margins(0)
     plt.clf()
@@ -112,15 +111,15 @@ extractData()
 graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 260, 10)
 graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 0, 260, 10)
 graphBoxPlot(pingStats, DEVIATION, "Ping (ms)", "PingDeviations", 0, 110, 10)
-graphDistr(pings, "Pings", 0, 260, 10)
+graphDistr(pings, "Ping (ms)", "Pings", 0, 260, 10)
 
-graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
-graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
+graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 10010, 10)
+graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 0, 10010, 10)
 graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
-graphDistr(inputLatencies, "InputLatencies", 0, 260, 10)
+graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 10010, 10)
 
 graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 1000, 100)
-graphDistr(totalPacketLosses, "TotalPacketLoss", 0, 1000, 100)
+graphDistr(totalPacketLosses, "Packet Loss", "TotalPacketLoss", 0, 1000, 100)
 
 
 
