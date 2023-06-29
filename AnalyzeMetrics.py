@@ -126,9 +126,13 @@ graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
 graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
 
-timeSeconds = []
+metricsTimeSeconds = []
+latenciesTimeSeconds = []
 for time in metricsTime:
-    timeSeconds.append(time.time().second)
+    metricsTimeSeconds.append(time.time().second)
+
+for time in latenciesTime:
+    latenciesTimeSeconds.append(time.time().second)
 
 seconds = list(range(0, 60))
 
@@ -145,10 +149,12 @@ for i in range (60):
     pingsAtSeconds.append([])
     inputLatenciesAtSeconds.append([])
 
-for i in range(len(timeSeconds)):
-    totalPacketLossAtSeconds[timeSeconds[i]] += packetLosses[i]
-    pingsAtSeconds[timeSeconds[i]].append(pings[i])
-    inputLatenciesAtSeconds[timeSeconds[i]].append(inputLatencies[i])
+for i in range(len(metricsTimeSeconds)):
+    totalPacketLossAtSeconds[metricsTimeSeconds[i]] += packetLosses[i]
+    pingsAtSeconds[metricsTimeSeconds[i]].append(pings[i])
+
+for i in range (len(latenciesTimeSeconds)):
+    inputLatenciesAtSeconds[latenciesTimeSeconds[i]].append(inputLatencies[i])
 
 for i in range(len(seconds)):
     averagePingAtSeconds.append(statistics.mean(pingsAtSeconds[i]))
