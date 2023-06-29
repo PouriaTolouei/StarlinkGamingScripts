@@ -11,6 +11,8 @@ from pyvirtualdisplay import Display
 from mss import mss
 from PIL import Image
 from datetime import datetime
+import matplotlib.dates as mdates
+
 
 
 
@@ -328,14 +330,14 @@ def exportLatenciesData():
 def createLatenciesGraph(inputLatency):
   inputLatency = list(zip(*inputLatency))
   plt.figure(figsize=(21,11))
-  plt.plot(inputLatency[0], inputLatency[PING], '-o', label="Ping (ms)")
-  plt.plot(inputLatency[0], inputLatency[INPUTLATENCY], '-o', label="Input Latency (ms)")
-  plt.plot(inputLatency[0], inputLatency[PACKETLOSS], '-o', label="Packet Loss")
+  plt.plot(inputLatency[TIME], inputLatency[PING], '-o', label="Ping (ms)")
+  plt.plot(inputLatency[TIME], inputLatency[INPUTLATENCY], '-o', label="Input Latency (ms)")
+  plt.plot(inputLatency[TIME], inputLatency[PACKETLOSS], '-o', label="Packet Loss")
   plt.legend(loc="upper left")
   plt.ylim(0, 350)
-  plt.xlim(0, 122)
   plt.yticks(range(0, 350, 50))
-  plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
+  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+  plt.gca().xaxis.set_major_locator(mdates.SecondLocator([0, 10, 20, 30, 40 , 50]))
   plt.xlabel("Time (s)")
   plt.margins(0)
   plt.savefig(testFolder + "Latencies" + str(roundNum) + ".jpg")
@@ -347,15 +349,15 @@ def createMetricsGraph(metrics):
   resolutionLabels = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
   metrics = list(zip(*metrics))
   plt.figure(figsize=(21,11))
-  plt.plot(metrics[0], metrics[PING], '-o', label="Ping (ms)")
-  plt.plot(metrics[0], metrics[PACKETLOSS], '-o', label="Packet Loss")
-  plt.plot(metrics[0], metrics[FPS], '-o', label="Stream FPS")
-  plt.plot(metrics[0], metrics[USEDBAND], '-o', label="Used Bandwidth (Mbps)")
+  plt.plot(metrics[TIME], metrics[PING], '-o', label="Ping (ms)")
+  plt.plot(metrics[TIME], metrics[PACKETLOSS], '-o', label="Packet Loss")
+  plt.plot(metrics[TIME], metrics[FPS], '-o', label="Stream FPS")
+  plt.plot(metrics[TIME], metrics[USEDBAND], '-o', label="Used Bandwidth (Mbps)")
   plt.legend(loc="upper left")
   plt.ylim(0, 300)
-  plt.xlim(0, 122)
   plt.yticks(range(0, 300, 50))
-  plt.xticks(range(0, int(CAPTURE_LENGTH) + 10, 10))
+  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+  plt.gca().xaxis.set_major_locator(mdates.SecondLocator([0, 10, 20, 30, 40 , 50]))
   plt.xlabel("Time (s)")
   plt.margins(0)
   SecondaryYAxis = plt.twinx()
