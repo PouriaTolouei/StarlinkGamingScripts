@@ -113,10 +113,10 @@ graphBoxPlot(pingStats, AVERAGE, "Ping (ms)", "PingAverages", 0, 260, 10)
 graphBoxPlot(pingStats, DEVIATION, "Ping (ms)", "PingDeviations", 0, 110, 10)
 graphDistr(pings, "Ping (ms)", "Pings", 0, 260, 10)
 
-graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 10010, 10)
-graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 0, 10010, 10)
+graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
+graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
-graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 10010, 10)
+graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 
 graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 1000, 100)
 graphDistr(totalPacketLosses, "Packet Loss", "TotalPacketLoss", 0, 1000, 100)
