@@ -148,7 +148,7 @@ for i in range (60):
 for i in range(len(timeSeconds)):
     totalPacketLossAtSeconds[timeSeconds[i]] += packetLosses[i]
     pingsAtSeconds[timeSeconds[i]].append(pings[i])
-    inputLatenciesAtSeconds[timeSeconds[i]].append(pings[i])
+    inputLatenciesAtSeconds[timeSeconds[i]].append(inputLatencies[i])
 
 for i in range(len(seconds)):
     averagePingAtSeconds.append(statistics.mean(pingsAtSeconds[i]))
