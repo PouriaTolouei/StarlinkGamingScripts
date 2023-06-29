@@ -20,8 +20,8 @@ import matplotlib.dates as mdates
 
 KEY_DELAY = 1
 CAPTURE_LENGTH = "120"
-FIELDS = ["Time", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution"]
-FIELDS2 = ["Time",  "Ping", "Packet Loss", "Input Latency"]
+FIELDS = ["Time", "Timestamp", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution"]
+FIELDS2 = ["Time", "Timestamp", "Ping", "Packet Loss", "Input Latency"]
 
 INTERFACE = "enp2s0"
 
@@ -193,7 +193,7 @@ def captureMetrics():
       metric = [] # stores all the metrics for each interval
 
       sec = time.time() - startTime # seconds passed since the start of collection
-      actualTime = str(datetime.now())
+      actualTime = datetime.now()
       
       # Locates all the web elements where the metric are displayed
       ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
@@ -260,7 +260,7 @@ def driveCar():
       measurements = [] # Keeps track of the input latency measurements
 
       sec = time.time() - startTime # seconds passed since the start of input latency collection
-      actualTime = str(datetime.now())
+      actualTime = datetime.now()
       measurements.append(sec)
       measurements.append(actualTime)
      
@@ -356,15 +356,15 @@ def createMetricsGraph(metrics):
   plt.legend(loc="upper left")
   plt.ylim(0, 300)
   plt.yticks(range(0, 300, 50))
-  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
-  plt.gca().xaxis.set_major_locator(mdates.SecondLocator([0, 10, 20, 30, 40 , 50]))
   plt.xlabel("Time (s)")
   plt.margins(0)
   SecondaryYAxis = plt.twinx()
   SecondaryYAxis.set_ylim(-1,6)
   SecondaryYAxis.set_ylabel("Resolution")
-  plt.plot(metrics[0], metrics[RESOLUTION], '-o', label="Resolution", yunits=UnitData(resolutionLabels), color="black")
+  plt.plot(metrics[TIME], metrics[RESOLUTION], '-o', label="Resolution", yunits=UnitData(resolutionLabels), color="black")
   plt.legend(loc="upper right")
+  plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+  plt.gca().xaxis.set_major_locator(mdates.SecondLocator([0, 10, 20, 30, 40 , 50]))
   plt.savefig(testFolder + "Metrics" + str(roundNum) + ".jpg")
   plt.clf()
 
