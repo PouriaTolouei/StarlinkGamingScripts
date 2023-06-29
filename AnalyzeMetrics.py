@@ -55,7 +55,8 @@ def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
     plt.ylim(0, 1.1)
     plt.yticks(np.arange(0, 1.1, 0.1))
     x = np.sort(metrics)
-    y = np.arange(len(metrics)) / float(len(metrics))
+    y = np.arange(len(metrics) + 1) / float(len(metrics))
+    x = np.insert(x, 0, x[0] - 1)
     plt.plot(x, y, marker='o', label='CDF')
     plt.legend(loc="upper left")
     plt.xlabel(xLabel)
@@ -122,8 +123,8 @@ graphBoxPlot(inputLatencyStats, AVERAGE, "Input Latency (ms)", "InputLatencyAver
 graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency (ms)", "InputLatencyDeviations", 0, 210, 10)
 graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 
-graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 1000, 100)
-graphDistr(totalPacketLosses, "Packet Loss", "TotalPacketLoss", 0, 1000, 100)
+graphBoxPlot(totalPacketLosses, NONE, "Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+graphDistr(totalPacketLosses, "Packet Loss", "TotalPacketLoss", 0, 1100, 100)
 
 
 
