@@ -150,7 +150,7 @@ for i in range(len(timeSeconds)):
     pingsAtSeconds[timeSeconds[i]].append(pings[i])
     inputLatenciesAtSeconds[timeSeconds[i]].append(pings[i])
 
-for i in range(len(timeSeconds)):
+for i in range(len(seconds)):
     averagePingAtSeconds.append(statistics.mean(pingsAtSeconds[i]))
     averageInputLatencyAtSecond.append(statistics.mean(inputLatenciesAtSeconds[i]))
     
