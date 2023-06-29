@@ -53,7 +53,7 @@ def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
     plt.xlim(minm, maxm)
     plt.xticks(range(minm, maxm, step))
     plt.ylim(0, 1.1)
-    plt.yticks(range(0, 1.1, 0.1))
+    plt.yticks(np.arange(0, 1.1, 0.1))
     x = np.sort(metrics)
     y = np.arange(len(metrics)) / float(len(metrics))
     plt.plot(x, y, marker='o', label='CDF')
