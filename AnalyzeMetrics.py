@@ -165,7 +165,7 @@ def extractData():
             exists = False
         
 
-        organizeDataBySecond()
+    organizeDataBySecond()
 
 
 #-------------------------------- Execution ---------------------------------------- 
