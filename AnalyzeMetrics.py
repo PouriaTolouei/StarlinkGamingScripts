@@ -171,7 +171,6 @@ def extractData():
 #-------------------------------- Execution ---------------------------------------- 
 
 extractData()
-organizeDataBySecond()
 
 graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 260, 10)
 graphBoxPlot(pingStats, AVERAGE, "Average Ping (ms)", "PingAverages", 0, 260, 10)
