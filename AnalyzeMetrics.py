@@ -178,7 +178,7 @@ graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 260, 10)
 graphBoxPlot(pingStats, AVERAGE, "Average Ping (ms)", "PingAverages", 0, 260, 10)
 graphBoxPlot(pingStats, DEVIATION, "Ping Standard Deviation (ms)", "PingDeviations", 0, 110, 10)
 graphDistr(pings, "Ping (ms)", "Pings", 0, 260, 10)
-graphBar(averagePingAtSeconds, "Average Ping (ms)", "AveragePing", 0, 90, 5)
+graphBar(averagePingAtSeconds, "Average Ping (ms)", "AveragePing", 0, 85, 5)
 
 graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, AVERAGE, "Average Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
