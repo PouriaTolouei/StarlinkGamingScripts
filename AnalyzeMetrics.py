@@ -107,10 +107,12 @@ def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
     plt.clf()
 
 #  Graphs bar graphs forshowing metrics by seconds in a minute
-def graphBar(metrics, ylabel, fileName):
+def graphBar(metrics, ylabel, fileName, minm, maxm, step):
     plt.figure(figsize =(20, 14))
     plt.xlim(-1, 60)
     plt.xticks(range(0, 60, 1))
+    plt.ylim(minm, maxm)
+    plt.yticks(range(minm, maxm, step))
     plt.bar(seconds, metrics)
     plt.xlabel("Second")
     plt.ylabel(ylabel)
@@ -176,17 +178,17 @@ graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 260, 10)
 graphBoxPlot(pingStats, AVERAGE, "Average Ping (ms)", "PingAverages", 0, 260, 10)
 graphBoxPlot(pingStats, DEVIATION, "Ping Standard Deviation (ms)", "PingDeviations", 0, 110, 10)
 graphDistr(pings, "Ping (ms)", "Pings", 0, 260, 10)
-graphBar(averagePingAtSeconds, "Average Ping (ms)", "AveragePing")
+graphBar(averagePingAtSeconds, "Average Ping (ms)", "AveragePing", 0, 110, 10)
 
 graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, AVERAGE, "Average Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
 graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency Standard Deviation (ms)", "InputLatencyDeviations", 0, 210, 10)
 graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
-graphBar(averageInputLatencyAtSeconds, "Average Input Latency (ms)", "AverageInputLatency")
+graphBar(averageInputLatencyAtSeconds, "Average Input Latency (ms)", "AverageInputLatency", 0, 210, 10)
 
 graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
 graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
-graphBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss")
+graphBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
 
 
 
