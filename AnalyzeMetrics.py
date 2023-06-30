@@ -184,8 +184,8 @@ graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency Standard Deviation (ms
 graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
 graphBar(averageInputLatencyAtSeconds, "Average Input Latency (ms)", "AverageInputLatency")
 
-graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
-graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
+graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
 graphBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss")
 
 
