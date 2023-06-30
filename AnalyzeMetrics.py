@@ -162,7 +162,7 @@ for i in range(len(seconds)):
     
 
 plt.figure(figsize =(20, 14))
-plt.xlim(0, 60)
+plt.xlim(-1, 60)
 plt.xticks(range(0, 60, 1))
 plt.bar(seconds, totalPacketLossAtSeconds)
 plt.xlabel("Second")
@@ -171,7 +171,7 @@ plt.savefig("totalPacketLossSeconds.jpg")
 plt.clf()
 
 plt.figure(figsize =(20, 14))
-plt.xlim(0, 60)
+plt.xlim(-1, 60)
 plt.xticks(range(0, 60, 1))
 plt.bar(seconds, averagePingAtSeconds)
 plt.xlabel("Second")
@@ -180,7 +180,7 @@ plt.savefig("averagePingSeconds.jpg")
 plt.clf()
 
 plt.figure(figsize =(20, 14))
-plt.xlim(0, 60)
+plt.xlim(-1, 60)
 plt.xticks(range(0, 60, 1))
 plt.bar(seconds, averageInputLatencyAtSeconds)
 plt.xlabel("Second")
