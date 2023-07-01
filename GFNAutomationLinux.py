@@ -26,7 +26,7 @@ FIELDS2 = ["Time", "Timestamp", "Ping", "Packet Loss", "Input Latency"]
 INTERFACE = "enp2s0"
 
 PROFILE_PATH = "/home/pouriatolouei/.config/google-chrome/"
-CAPTURE_PATH = "/home/pouriatolouei/Documents/StarLinkGamingScripts/Results/temp"
+CAPTURE_PATH = "/home/pouriatolouei/Documents/StarLinkGamingScripts/Results/temp/"
 PLAYER_TYPE = sys.argv[1]
 EXHAUST_POS_X = 960
 EXHAUST_POS_Y = 965
