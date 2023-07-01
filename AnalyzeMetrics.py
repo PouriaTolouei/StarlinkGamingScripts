@@ -64,6 +64,7 @@ def graphBoxPlot(stats, statType, yLabel, fileName, minm, maxm, step):
     plt.ylabel(yLabel)
     plt.savefig(fileName + ".jpg")
     plt.clf()
+    plt.close()
 
 # Graphs CDF for the metric passed in
 def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
@@ -82,6 +83,7 @@ def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
     plt.savefig(fileName + "Distr.jpg")
     plt.margins(0)
     plt.clf()
+    plt.close()
 
 #  Graphs bar graphs forshowing metrics by seconds in a minute
 def graphBar(metrics, ylabel, fileName, minm, maxm, step):
@@ -95,6 +97,7 @@ def graphBar(metrics, ylabel, fileName, minm, maxm, step):
     plt.ylabel(ylabel)
     plt.savefig(fileName + "AtSeconds.jpg")
     plt.clf()
+    plt.close()
 
 # Reads all the raw data from the CSV files in round folders and organizes them into arrays
 def extractData():
@@ -151,6 +154,7 @@ def extractData():
 #-------------------------------- Execution ---------------------------------------- 
 exists = True
 testNum = 1 
+os.chdir("Results")
 while exists:
     try:
 
