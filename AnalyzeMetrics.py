@@ -123,10 +123,11 @@ def graphBar(metrics, ylabel, fileName, minm, maxm, step):
 def extractData():
     exists = True
     i = 1
+    j = 1
 
     while exists:
         try:
-            os.chdir(str(i))
+            os.chdir("Test" + str(i) + "/" + str(j))
             print(os.getcwd())
 
             roundPings = []
@@ -161,10 +162,13 @@ def extractData():
             storeStats(inputLatencyStats, roundInputLatencies)
             totalPacketLosses.append(sum(roundPacketLosses))
             os.chdir('..')
-            i += 1
+            j += 1
+            
             
         except FileNotFoundError:
-            exists = False
+            i += 1
+            if os.path.exists("/home/pouriatolouei/Documents/StarLinkGamingScripts/Results/Test" + str(i)) == False:
+                exists = False
         
 
     organizeDataBySecond()
