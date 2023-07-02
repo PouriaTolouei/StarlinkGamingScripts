@@ -4,3 +4,4 @@ Unique.py
 __pycache__
 *.csv
 *.jpg
+*.DS_Store
