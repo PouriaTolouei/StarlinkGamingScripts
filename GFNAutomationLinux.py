@@ -20,7 +20,7 @@ import matplotlib.dates as mdates
 
 KEY_DELAY = 1
 CAPTURE_LENGTH = "120"
-FIELDS = ["Time", "Timestamp", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution"]
+FIELDS = ["Time", "Timestamp", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution", "Available Bandwidth"]
 FIELDS2 = ["Time", "Timestamp", "Ping", "Packet Loss", "Input Latency"]
 
 INTERFACE = "enp2s0"
@@ -41,6 +41,7 @@ INPUTLATENCY = 4
 FPS = 4
 USEDBAND = 5
 RESOLUTION = 6
+AVAILBAND = 7
 
 #-------------------------------- Methods ---------------------------------------- 
 
@@ -203,8 +204,8 @@ def captureMetrics():
       # frameLossTotal = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[1]/div/span[2]')
       # packetLossTotal = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[2]')
       resolution = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[5]/div/span')
-      # bandwidthAvailable = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[3]/div/span[1]')
       bandwidthUsed = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[4]/div/span[1]')
+      bandwidthAvailable = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[2]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[3]/div/span[1]')
 
       # Adds them to the list
       metric.append(sec)
@@ -214,6 +215,7 @@ def captureMetrics():
       metric.append(int(streamFPS.text))
       metric.append(int(bandwidthUsed.text))
       metric.append(resolution.text)
+      metrics.append(int(bandwidthAvailable.text))
 
       # Adds the metrics of each interval to the list of all the intervals
       metrics.append(metric)
@@ -353,6 +355,7 @@ def createMetricsGraph(metrics):
   plt.plot(metrics[TIME], metrics[PACKETLOSS], '-o', label="Packet Loss")
   plt.plot(metrics[TIME], metrics[FPS], '-o', label="Stream FPS")
   plt.plot(metrics[TIME], metrics[USEDBAND], '-o', label="Used Bandwidth (Mbps)")
+  plt.plot(metrics[TIME], metrics[AVAILBAND], '-o', Label="Available Bandwidth (Mbps)")
   plt.legend(loc="upper left")
   plt.ylim(0, 300)
   plt.yticks(range(0, 300, 50))
