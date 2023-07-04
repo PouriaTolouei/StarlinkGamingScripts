@@ -129,11 +129,12 @@ def extractData():
                 line_count = 0
                 for row in csv_reader:
                     if line_count > 0:
+                        metricsSeconds.append(int(row[SEC]))
                         metricsTime.append(datetime.strptime(row[TIME], '%Y-%m-%d %H:%M:%S.%f'))
-                        pings.append(float(row[PING]))
-                        roundPings.append(float(row[PING]))
-                        packetLosses.append(float(row[PACKETLOSS]))
-                        roundPacketLosses.append(float(row[PACKETLOSS]))
+                        pings.append(int(row[PING]))
+                        roundPings.append(int(row[PING]))
+                        packetLosses.append(int(row[PACKETLOSS]))
+                        roundPacketLosses.append(int(row[PACKETLOSS]))
                     
                     line_count += 1
             
@@ -160,7 +161,9 @@ while exists:
 
         # Array of metrics
         latenciesTime = [] # Times from the metrics files
+        latencySeconds = []
         metricsTime = [] # Times from the latencies files
+        metricsSeconds = []
         pings = []
         inputLatencies = []
         packetLosses = []
@@ -199,6 +202,19 @@ while exists:
         graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
         graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
         graphBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+
+        secsSincePacketLoss = []
+        lastPackeLossTime = 0
+        for i in range(len(packetLosses)):
+            sincePacketLoss = metricsSeconds[i] - lastPackeLossTime
+            if (packetLosses[i] > 0):
+                lastPackeLossTime = metricsSeconds[i]
+                secsSincePacketLoss.append(int(sincePacketLoss))
+
+        plt.figure(figsize =(20, 14))        
+        plt.hist(secsSincePacketLoss)
+        plt.clf()
+        plt.close()
 
         os.chdir('..')
         testNum += 1
