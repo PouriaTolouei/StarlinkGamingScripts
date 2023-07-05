@@ -105,6 +105,24 @@ def graphBar(metrics, ylabel, fileName, minm, maxm, step):
     plt.clf()
     plt.close()
 
+# Graphs a bar graph of the observed resolutions 
+def graphResolutionBar():
+    resolutionsCount = {}
+    for label in resolutionLabels:
+        resolutionsCount[label] = 0
+
+    for resolution in resolutions:
+        resolutionsCount[resolution] += 1
+
+    counts = list(resolutionsCount.values())
+
+    plt.figure(figsize =(20, 14))
+    plt.bar(resolutionLabels, counts)
+    plt.xlabel("Resolution")
+    plt.ylabel("Frequency")
+    plt.savefig("ResolutionsBar.jpg")
+
+
 # Reads all the raw data from the CSV files in round folders and organizes them into arrays
 def extractData():
     exists = True
@@ -220,12 +238,12 @@ while exists:
 
         graphBoxPlot(usedBandWidths, NONE, "Used BandWidth (Mbps)", "UsedBandwidths", 0, 52, 2)
         # graphBoxPlot(usedBandwidthStats, AVERAGE, "Average Used BandWidth (Mbps)", "UsedBandwidthAverages", 0, 52, 2)
-        graphBoxPlot(usedBandwidthStats, DEVIATION, "Used BandWidth Standard Deviation (Mbps)", "UsedBandwidthDeviations", 0, 50, 2)
+        graphBoxPlot(usedBandwidthStats, DEVIATION, "Used BandWidth Standard Deviation (Mbps)", "UsedBandwidthDeviations", 0, 20, 1)
         graphDistr(usedBandWidths, "Used BandWidth (Mbps)", "UsedBandwidths", 0, 52, 2)
 
         graphBoxPlot(availableBandwidths, NONE, "Available BandWidth (Mbps)", "AvailableBandwidths", 0, 160, 10)
         # graphBoxPlot(availableBandwidthStats, AVERAGE, "Average Available BandWidth (Mbps)", "AvailableBandwidthAverages", 0, 105, 5)
-        graphBoxPlot(availableBandwidthStats, DEVIATION, "Used BandWidth Standard Deviation (Mbps)", "AvailableBandwidthDeviations", 0, 160, 10)
+        graphBoxPlot(availableBandwidthStats, DEVIATION, "Used BandWidth Standard Deviation (Mbps)", "AvailableBandwidthDeviations", 0, 50, 2)
         graphDistr(availableBandwidths, "Available BandWidth (Mbps)", "AvailableBandwidths", 0, 160, 10)
         graphBar(averageAvailableBandwidthAtSeconds, "Average Available BandWidth (Mbps)", "AverageAvailableBandwidth", 0, 160, 10)
 
@@ -233,20 +251,7 @@ while exists:
         graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
         graphBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
 
-        resolutionsCount = {}
-        for label in resolutionLabels:
-            resolutionsCount[label] = 0
-        
-        for resolution in resolutions:
-            resolutionsCount[resolution] += 1
-
-        counts = list(resolutionsCount.values())
-
-        plt.figure(figsize =(20, 14))
-        plt.bar(resolutionLabels, counts)
-        plt.xlabel("Resolution")
-        plt.ylabel("Frequency")
-        plt.savefig("ResolutionsBar.jpg")
+        graphResolutionBar()
 
         os.chdir('..')
         testNum += 1
