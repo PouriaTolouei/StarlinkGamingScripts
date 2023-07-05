@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import numpy as np
 import matplotlib.dates as mdates
-from astropy.visualization import hist
+import pandas as pd
 
 #------------------------- Variables and Constants  ------------------------------ 
 # Boxplot stat types
@@ -20,6 +20,9 @@ INPUTLATENCY = 4
 FPS = 4
 USEDBAND = 5
 RESOLUTION = 6
+AVAILBAND = 7
+
+resolutionLabels = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
 
 #-------------------------------- Methods ---------------------------------------- 
 
@@ -40,10 +43,12 @@ def organizeDataBySecond():
         totalPacketLossAtSeconds.append(0)
         pingsAtSeconds.append([])
         inputLatenciesAtSeconds.append([])
+        availableBandwidthsAtSeconds([])
 
     for i in range(len(metricsTimeSeconds)):
         totalPacketLossAtSeconds[metricsTimeSeconds[i]] += packetLosses[i]
         pingsAtSeconds[metricsTimeSeconds[i]].append(pings[i])
+        availableBandwidthsAtSeconds[metricsTimeSeconds[i]].append(availableBandwidths[i])
 
     for i in range (len(latenciesTimeSeconds)):
         inputLatenciesAtSeconds[latenciesTimeSeconds[i]].append(inputLatencies[i])
@@ -51,6 +56,7 @@ def organizeDataBySecond():
     for i in range(len(seconds)):
         averagePingAtSeconds.append(statistics.mean(pingsAtSeconds[i]))
         averageInputLatencyAtSeconds.append(statistics.mean(inputLatenciesAtSeconds[i]))
+        averageAvailableBandwidthAtSeconds.append(statistics.mean(availableBandwidthsAtSeconds[i]))
 
 # Graphs boxplot for the metric passed in
 def graphBoxPlot(stats, statType, yLabel, fileName, minm, maxm, step):
@@ -112,6 +118,8 @@ def extractData():
             roundPings = []
             roundPacketLosses = []
             roundInputLatencies = []
+            roundUsedBandwidths = []
+            roundAvailableBandwidths = []
 
             with open('Latencies' + str(roundNum) + '.csv') as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
@@ -130,15 +138,22 @@ def extractData():
                 for row in csv_reader:
                     if line_count > 0:
                         metricsTime.append(datetime.strptime(row[TIME], '%Y-%m-%d %H:%M:%S.%f'))
-                        pings.append(float(row[PING]))
-                        roundPings.append(float(row[PING]))
-                        packetLosses.append(float(row[PACKETLOSS]))
-                        roundPacketLosses.append(float(row[PACKETLOSS]))
+                        pings.append(int(row[PING]))
+                        roundPings.append(int(row[PING]))
+                        packetLosses.append(int(row[PACKETLOSS]))
+                        roundPacketLosses.append(int(row[PACKETLOSS]))
+                        usedBandWidths.append(int(row[usedBandWidths]))
+                        roundUsedBandwidths.append(int(row[usedBandWidths]))
+                        availableBandwidths.append(int(row[availableBandwidths]))
+                        roundAvailableBandwidths.append(int(row[availableBandwidths]))
+                        resolutions.append(row[RESOLUTION])
                     
                     line_count += 1
             
             storeStats(pingStats, roundPings)
             storeStats(inputLatencyStats, roundInputLatencies)
+            storeStats(usedBandwidthStats, roundUsedBandwidths)
+            storeStats(availableBandwidthStats, roundAvailableBandwidths)
             totalPacketLosses.append(sum(roundPacketLosses))
             os.chdir('..')
             roundNum += 1
@@ -164,10 +179,15 @@ while exists:
         pings = []
         inputLatencies = []
         packetLosses = []
+        usedBandWidths = []
+        resolutions = []
+        availableBandwidths = []
 
         # Array of metric stats
         pingStats = [[], []]
         inputLatencyStats = [[], []]
+        usedBandwidthStats = [[], []]
+        availableBandwidthStats = [[], []]
         totalPacketLosses = []
 
         # Array of seconds
@@ -180,25 +200,55 @@ while exists:
         averagePingAtSeconds = []
         inputLatenciesAtSeconds = []
         averageInputLatencyAtSeconds = []
+        availableBandwidthsAtSeconds = []
+        averageAvailableBandwidthAtSeconds = []
 
         os.chdir("Test" + str(testNum))
         extractData()
 
         graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 260, 10)
-        graphBoxPlot(pingStats, AVERAGE, "Average Ping (ms)", "PingAverages", 0, 260, 10)
+        # graphBoxPlot(pingStats, AVERAGE, "Average Ping (ms)", "PingAverages", 0, 260, 10)
         graphBoxPlot(pingStats, DEVIATION, "Ping Standard Deviation (ms)", "PingDeviations", 0, 110, 10)
         graphDistr(pings, "Ping (ms)", "Pings", 0, 260, 10)
         graphBar(averagePingAtSeconds, "Average Ping (ms)", "AveragePing", 0, 85, 5)
 
         graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
-        graphBoxPlot(inputLatencyStats, AVERAGE, "Average Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
+        # graphBoxPlot(inputLatencyStats, AVERAGE, "Average Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
         graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency Standard Deviation (ms)", "InputLatencyDeviations", 0, 210, 10)
         graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
         graphBar(averageInputLatencyAtSeconds, "Average Input Latency (ms)", "AverageInputLatency", 0, 190, 10)
 
+        graphBoxPlot(usedBandWidths, NONE, "Used BandWidth (Mbps)", "UsedBandwidths", 0, 52, 2)
+        # graphBoxPlot(usedBandwidthStats, AVERAGE, "Average Used BandWidth (Mbps)", "UsedBandwidthAverages", 0, 52, 2)
+        graphBoxPlot(usedBandwidthStats, DEVIATION, "Used BandWidth Standard Deviation (Mbps)", "UsedBandwidthDeviations", 0, 50, 2)
+        graphDistr(usedBandWidths, "Used BandWidth (Mbps)", "UsedBandwidths", 0, 52, 2)
+
+        graphBoxPlot(availableBandwidths, NONE, "Available BandWidth (Mbps)", "AvailableBandwidths", 0, 160, 10)
+        # graphBoxPlot(availableBandwidthStats, AVERAGE, "Average Available BandWidth (Mbps)", "AvailableBandwidthAverages", 0, 105, 5)
+        graphBoxPlot(availableBandwidthStats, DEVIATION, "Used BandWidth Standard Deviation (Mbps)", "UsedBandwidthDeviations", 0, 160, 10)
+        graphDistr(availableBandwidths, "Available BandWidth (Mbps)", "AvailableBandwidths", 0, 160, 10)
+        graphBar(averageAvailableBandwidthAtSeconds, "Average Available BandWidth (Mbps)", "AverageAvailableBandwidth", 0, 160, 10)
+
         graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
         graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
         graphBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+
+        resolutionsCount = {}
+        for label in resolutionLabels:
+            resolutionLabels[label] = 0
+        
+        for resolution in resolutions:
+            resolutionsCount[resolution] += 1
+
+        counts = list(resolutionsCount.values())
+
+        plt.figure(figsize =(20, 14))
+        plt.ylim(0, 130)
+        plt.yticks(0, 130, 10)
+        plt.bar(resolutionLabels, counts)
+        plt.xlabel("Resolution")
+        plt.ylabel("Frequency")
+        plt.savefig("ResolutionsBar.jpg")
 
         os.chdir('..')
         testNum += 1
