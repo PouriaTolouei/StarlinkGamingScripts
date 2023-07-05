@@ -355,7 +355,7 @@ def createMetricsGraph(metrics):
   plt.plot(metrics[TIME], metrics[PACKETLOSS], '-o', label="Packet Loss")
   plt.plot(metrics[TIME], metrics[FPS], '-o', label="Stream FPS")
   plt.plot(metrics[TIME], metrics[USEDBAND], '-o', label="Used Bandwidth (Mbps)")
-  plt.plot(metrics[TIME], metrics[AVAILBAND], '-o', Label="Available Bandwidth (Mbps)")
+  plt.plot(metrics[TIME], metrics[AVAILBAND], '-o', label="Available Bandwidth (Mbps)")
   plt.legend(loc="upper left")
   plt.ylim(0, 300)
   plt.yticks(range(0, 300, 50))
