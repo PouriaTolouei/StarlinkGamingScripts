@@ -121,6 +121,8 @@ def graphResolutionBar():
     plt.xlabel("Resolution")
     plt.ylabel("Frequency")
     plt.savefig("ResolutionsBar.jpg")
+    plt.clf()
+    plt.close()
 
 
 # Reads all the raw data from the CSV files in round folders and organizes them into arrays
