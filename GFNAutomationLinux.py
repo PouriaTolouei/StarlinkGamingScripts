@@ -215,7 +215,7 @@ def captureMetrics():
       metric.append(int(streamFPS.text))
       metric.append(int(bandwidthUsed.text))
       metric.append(resolution.text)
-      metrics.append(int(bandwidthAvailable.text))
+      metric.append(int(bandwidthAvailable.text))
 
       # Adds the metrics of each interval to the list of all the intervals
       metrics.append(metric)
