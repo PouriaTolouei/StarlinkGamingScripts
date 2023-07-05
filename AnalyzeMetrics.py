@@ -43,7 +43,7 @@ def organizeDataBySecond():
         totalPacketLossAtSeconds.append(0)
         pingsAtSeconds.append([])
         inputLatenciesAtSeconds.append([])
-        availableBandwidthsAtSeconds([])
+        availableBandwidthsAtSeconds.append([])
 
     for i in range(len(metricsTimeSeconds)):
         totalPacketLossAtSeconds[metricsTimeSeconds[i]] += packetLosses[i]
@@ -142,10 +142,10 @@ def extractData():
                         roundPings.append(int(row[PING]))
                         packetLosses.append(int(row[PACKETLOSS]))
                         roundPacketLosses.append(int(row[PACKETLOSS]))
-                        usedBandWidths.append(int(row[usedBandWidths]))
-                        roundUsedBandwidths.append(int(row[usedBandWidths]))
-                        availableBandwidths.append(int(row[availableBandwidths]))
-                        roundAvailableBandwidths.append(int(row[availableBandwidths]))
+                        usedBandWidths.append(int(row[USEDBAND]))
+                        roundUsedBandwidths.append(int(row[USEDBAND]))
+                        availableBandwidths.append(int(row[AVAILBAND]))
+                        roundAvailableBandwidths.append(int(row[AVAILBAND]))
                         resolutions.append(row[RESOLUTION])
                     
                     line_count += 1
@@ -235,7 +235,7 @@ while exists:
 
         resolutionsCount = {}
         for label in resolutionLabels:
-            resolutionLabels[label] = 0
+            resolutionsCount[label] = 0
         
         for resolution in resolutions:
             resolutionsCount[resolution] += 1
@@ -243,8 +243,6 @@ while exists:
         counts = list(resolutionsCount.values())
 
         plt.figure(figsize =(20, 14))
-        plt.ylim(0, 130)
-        plt.yticks(0, 130, 10)
         plt.bar(resolutionLabels, counts)
         plt.xlabel("Resolution")
         plt.ylabel("Frequency")
