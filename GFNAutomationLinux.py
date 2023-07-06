@@ -93,14 +93,15 @@ def launchGame() -> WebElement:
   # Waits until the game loads on the remote systen (usually takes around 30 seconds)
   time.sleep(5)
 
+  # Locates the video stream
+  element = driver.find_element(By.TAG_NAME, "video")
+
+  # Brings up the stats overlay
   time.sleep(KEY_DELAY)
   element.send_keys("n")
 
   # Waits until the game loads on the remote systen (usually takes around 30 seconds)
   time.sleep(55)
-
-  # Locates the video stream
-  element = driver.find_element(By.TAG_NAME, "video")
 
   # Presses the enter key to start the game 
   element.send_keys(Keys.ENTER)
