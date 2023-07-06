@@ -20,7 +20,7 @@ import matplotlib.dates as mdates
 
 KEY_DELAY = 1
 CAPTURE_LENGTH = "120"
-FIELDS = ["Time", "Timestamp", "Stream FPS", "Ping", "Packet Loss", "Used Bandwidth", "Resolution", "Available Bandwidth"]
+FIELDS = ["Time", "Timestamp", "Ping", "Packet Loss", "Stream FPS", "Used Bandwidth", "Resolution", "Available Bandwidth"]
 FIELDS2 = ["Time", "Timestamp", "Ping", "Packet Loss", "Input Latency"]
 
 INTERFACE = "enp2s0"
@@ -226,7 +226,7 @@ def captureMetrics():
 
       # Adds the metrics of each interval to the list of all the intervals
       metrics.append(metric)
-      time.sleep(1)
+      time.sleep(0.85)
 
 # Captures the boost action by observing pixel color change towards red in the exhaust 
 def captureAction(measurements):
