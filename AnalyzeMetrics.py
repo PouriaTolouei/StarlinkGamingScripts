@@ -93,9 +93,7 @@ def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
     plt.close()
 
 #  Graphs bar graphs forshowing metrics by seconds in a minute
-def graphSecondsBar(metrics, ylabel, fileName, minm, maxm, step):
-    organizeDataBySecond()
-    
+def graphSecondsBar(metrics, ylabel, fileName, minm, maxm, step): 
     plt.figure(figsize =(20, 14))
     plt.xlim(-1, 60)
     plt.xticks(range(0, 60, 1))
@@ -188,10 +186,12 @@ def extractData():
             # Exits round folder and moves on to the next
             os.chdir('..')
             roundNum += 1
-            
+        
         except FileNotFoundError:
             # Stops extracting data as no more round folders exist
             exists = False
+        
+        organizeDataBySecond()
         
 
 #-------------------------------- Execution ---------------------------------------- 
