@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import numpy as np
 import matplotlib.dates as mdates
-import pandas as pd
 
 #------------------------- Variables and Constants  ------------------------------ 
 # Boxplot stat types
