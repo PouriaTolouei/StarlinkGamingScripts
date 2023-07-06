@@ -1,8 +1,7 @@
-import matplotlib, csv, os, statistics
+import csv, os, statistics
 import matplotlib.pyplot as plt
 from datetime import datetime
 import numpy as np
-import matplotlib.dates as mdates
 
 #------------------------- Variables and Constants  ------------------------------ 
 # Boxplot stat types
@@ -21,8 +20,10 @@ USEDBAND = 5
 RESOLUTION = 6
 AVAILBAND = 7
 
+# Categories 
 resolutionCategories = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
 fpsCategories = list(range(0, 71))
+seconds = list(range(0, 60))
 
 #-------------------------------- Methods ---------------------------------------- 
 
@@ -93,6 +94,8 @@ def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
 
 #  Graphs bar graphs forshowing metrics by seconds in a minute
 def graphSecondsBar(metrics, ylabel, fileName, minm, maxm, step):
+    organizeDataBySecond()
+    
     plt.figure(figsize =(20, 14))
     plt.xlim(-1, 60)
     plt.xticks(range(0, 60, 1))
@@ -107,14 +110,12 @@ def graphSecondsBar(metrics, ylabel, fileName, minm, maxm, step):
 
 # Graphs a bar graph with the categories of the metric passed in 
 def graphBar(metrics, categories, xLabel, fileName):
+    # Counts the categories of the metrics
     categoriesCount = {}
-   
     for category in categories:
         categoriesCount[category] = 0
-
     for metric in metrics:
         categoriesCount[metric] += 1
-
     counts = list(categoriesCount.values())
 
     plt.figure(figsize =(20, 14))
@@ -131,17 +132,21 @@ def extractData():
     exists = True
     roundNum = 1
 
+    # Keeps extracting data while the round folders exist
     while exists:
         try:
+            # Enters each round folder and prints it to confirm
             os.chdir(str(roundNum))
             print(os.getcwd())
 
+            # Temporary round arrays used for average and standard deviation calculations
             roundPings = []
             roundPacketLosses = []
             roundInputLatencies = []
             roundUsedBandwidths = []
             roundAvailableBandwidths = []
 
+            # Reads the Latencies(roundNum).csv file
             with open('Latencies' + str(roundNum) + '.csv') as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
                 line_count = 0
@@ -153,6 +158,7 @@ def extractData():
                     
                     line_count += 1
 
+            # Reads the Metrics(roundNum).csv file
             with open('Metrics' + str(roundNum) + '.csv') as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=',')
                 line_count = 0
@@ -172,30 +178,32 @@ def extractData():
                     
                     line_count += 1
             
+            # Calculates and stores the stats
             storeStats(pingStats, roundPings)
             storeStats(inputLatencyStats, roundInputLatencies)
             storeStats(usedBandwidthStats, roundUsedBandwidths)
             storeStats(availableBandwidthStats, roundAvailableBandwidths)
             totalPacketLosses.append(sum(roundPacketLosses))
 
+            # Exits round folder and moves on to the next
             os.chdir('..')
             roundNum += 1
             
-            
         except FileNotFoundError:
+            # Stops extracting data as no more round folders exist
             exists = False
         
-
-    organizeDataBySecond()
-
 
 #-------------------------------- Execution ---------------------------------------- 
 exists = True
 testNum = 1 
+
+# Enters the Results folder
 os.chdir("Results")
+
+# Keeps analyzing while the test folders exist
 while exists:
     try:
-
         # Array of metrics
         latenciesTime = [] # Times from the metrics files
         metricsTime = [] # Times from the latencies files
@@ -217,7 +225,7 @@ while exists:
         # Array of seconds
         metricsTimeSeconds = []
         latenciesTimeSeconds = []
-        seconds = list(range(0, 60))
+        
         # Array of data oragnized by seconds in a minute
         totalPacketLossAtSeconds = []
         pingsAtSeconds = []
@@ -227,8 +235,11 @@ while exists:
         availableBandwidthsAtSeconds = []
         averageAvailableBandwidthAtSeconds = []
 
+        # Enters each test folder for analysis
         os.chdir("Test" + str(testNum))
         extractData()
+
+        # Graph generation
 
         graphBoxPlot(pings, NONE, "Ping (ms)", "Pings", 0, 260, 10)
         # graphBoxPlot(pingStats, AVERAGE, "Average Ping (ms)", "PingAverages", 0, 260, 10)
@@ -260,22 +271,10 @@ while exists:
         graphBar(resolutions, resolutionCategories, "Resolution", "Resolutions")
         graphBar(frames, fpsCategories, "FPS", "FPS")
 
+        # Exits the test folder and moves on to the next
         os.chdir('..')
         testNum += 1
     
     except FileNotFoundError:
+        # Stops the analysis as no more test folders exist
         exists = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
