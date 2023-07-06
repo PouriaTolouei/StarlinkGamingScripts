@@ -191,7 +191,7 @@ def extractData():
             # Stops extracting data as no more round folders exist
             exists = False
         
-        organizeDataBySecond()
+    organizeDataBySecond()
         
 
 #-------------------------------- Execution ---------------------------------------- 
