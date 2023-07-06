@@ -21,7 +21,8 @@ USEDBAND = 5
 RESOLUTION = 6
 AVAILBAND = 7
 
-resolutionLabels = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
+resolutionCategories = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
+fpsCategories = [30, 60]
 
 #-------------------------------- Methods ---------------------------------------- 
 
@@ -91,7 +92,7 @@ def graphDistr(metrics, xLabel, fileName, minm, maxm, step):
     plt.close()
 
 #  Graphs bar graphs forshowing metrics by seconds in a minute
-def graphBar(metrics, ylabel, fileName, minm, maxm, step):
+def graphSecondsBar(metrics, ylabel, fileName, minm, maxm, step):
     plt.figure(figsize =(20, 14))
     plt.xlim(-1, 60)
     plt.xticks(range(0, 60, 1))
@@ -104,22 +105,23 @@ def graphBar(metrics, ylabel, fileName, minm, maxm, step):
     plt.clf()
     plt.close()
 
-# Graphs a bar graph of the observed resolutions 
-def graphResolutionBar():
-    resolutionsCount = {}
-    for label in resolutionLabels:
-        resolutionsCount[label] = 0
+# Graphs a bar graph with the categories of the metric passed in 
+def graphBar(metrics, categories, xLabel, fileName):
+    categoriesCount = {}
+   
+    for category in categories:
+        categoriesCount[category] = 0
 
-    for resolution in resolutions:
-        resolutionsCount[resolution] += 1
+    for metric in metrics:
+        categoriesCount[metric] += 1
 
-    counts = list(resolutionsCount.values())
+    counts = list(categoriesCount.values())
 
     plt.figure(figsize =(20, 14))
-    plt.bar(resolutionLabels, counts)
-    plt.xlabel("Resolution")
+    plt.bar(categories, counts)
+    plt.xlabel(xLabel)
     plt.ylabel("Frequency")
-    plt.savefig("ResolutionsBar.jpg")
+    plt.savefig(fileName + ".jpg")
     plt.clf()
     plt.close()
 
@@ -165,6 +167,7 @@ def extractData():
                         roundUsedBandwidths.append(int(row[USEDBAND]))
                         availableBandwidths.append(int(row[AVAILBAND]))
                         roundAvailableBandwidths.append(int(row[AVAILBAND]))
+                        frames.append(int(row[FPS]))
                         resolutions.append(row[RESOLUTION])
                     
                     line_count += 1
@@ -174,6 +177,7 @@ def extractData():
             storeStats(usedBandwidthStats, roundUsedBandwidths)
             storeStats(availableBandwidthStats, roundAvailableBandwidths)
             totalPacketLosses.append(sum(roundPacketLosses))
+
             os.chdir('..')
             roundNum += 1
             
@@ -199,6 +203,7 @@ while exists:
         inputLatencies = []
         packetLosses = []
         usedBandWidths = []
+        frames = []
         resolutions = []
         availableBandwidths = []
 
@@ -229,13 +234,13 @@ while exists:
         # graphBoxPlot(pingStats, AVERAGE, "Average Ping (ms)", "PingAverages", 0, 260, 10)
         graphBoxPlot(pingStats, DEVIATION, "Ping Standard Deviation (ms)", "PingDeviations", 0, 110, 10)
         graphDistr(pings, "Ping (ms)", "Pings", 0, 260, 10)
-        graphBar(averagePingAtSeconds, "Average Ping (ms)", "AveragePing", 0, 85, 5)
+        graphSecondsBar(averagePingAtSeconds, "Average Ping (ms)", "AveragePing", 0, 85, 5)
 
         graphBoxPlot(inputLatencies, NONE, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
         # graphBoxPlot(inputLatencyStats, AVERAGE, "Average Input Latency (ms)", "InputLatencyAverages", 0, 260, 10)
         graphBoxPlot(inputLatencyStats, DEVIATION, "Input Latency Standard Deviation (ms)", "InputLatencyDeviations", 0, 210, 10)
         graphDistr(inputLatencies, "Input Latency (ms)", "InputLatencies", 0, 260, 10)
-        graphBar(averageInputLatencyAtSeconds, "Average Input Latency (ms)", "AverageInputLatency", 0, 190, 10)
+        graphSecondsBar(averageInputLatencyAtSeconds, "Average Input Latency (ms)", "AverageInputLatency", 0, 190, 10)
 
         graphBoxPlot(usedBandWidths, NONE, "Used BandWidth (Mbps)", "UsedBandwidths", 0, 52, 2)
         # graphBoxPlot(usedBandwidthStats, AVERAGE, "Average Used BandWidth (Mbps)", "UsedBandwidthAverages", 0, 52, 2)
@@ -246,13 +251,14 @@ while exists:
         # graphBoxPlot(availableBandwidthStats, AVERAGE, "Average Available BandWidth (Mbps)", "AvailableBandwidthAverages", 0, 105, 5)
         graphBoxPlot(availableBandwidthStats, DEVIATION, "Used BandWidth Standard Deviation (Mbps)", "AvailableBandwidthDeviations", 0, 50, 2)
         graphDistr(availableBandwidths, "Available BandWidth (Mbps)", "AvailableBandwidths", 0, 160, 10)
-        graphBar(averageAvailableBandwidthAtSeconds, "Average Available BandWidth (Mbps)", "AverageAvailableBandwidth", 0, 160, 10)
+        graphSecondsBar(averageAvailableBandwidthAtSeconds, "Average Available BandWidth (Mbps)", "AverageAvailableBandwidth", 0, 160, 10)
 
         graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
         graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
-        graphBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+        graphSecondsBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
 
-        graphResolutionBar()
+        graphBar(resolutions, resolutionCategories, "Resolution", "Resolutions")
+        graphBar(frames, fpsCategories, "FPS", "FPS")
 
         os.chdir('..')
         testNum += 1
