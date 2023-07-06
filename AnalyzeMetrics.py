@@ -45,11 +45,13 @@ def organizeDataBySecond():
         pingsAtSeconds.append([])
         inputLatenciesAtSeconds.append([])
         availableBandwidthsAtSeconds.append([])
+        usedBandwidthAtSeconds.append([])
 
     for i in range(len(metricsTimeSeconds)):
         totalPacketLossAtSeconds[metricsTimeSeconds[i]] += packetLosses[i]
         pingsAtSeconds[metricsTimeSeconds[i]].append(pings[i])
         availableBandwidthsAtSeconds[metricsTimeSeconds[i]].append(availableBandwidths[i])
+        usedBandwidthAtSeconds[metricsTimeSeconds[i]].append(usedBandWidths[i])
 
     for i in range (len(latenciesTimeSeconds)):
         inputLatenciesAtSeconds[latenciesTimeSeconds[i]].append(inputLatencies[i])
@@ -58,6 +60,7 @@ def organizeDataBySecond():
         averagePingAtSeconds.append(statistics.mean(pingsAtSeconds[i]))
         averageInputLatencyAtSeconds.append(statistics.mean(inputLatenciesAtSeconds[i]))
         averageAvailableBandwidthAtSeconds.append(statistics.mean(availableBandwidthsAtSeconds[i]))
+        averageUsedBandwidthAtSeconds.append(statistics.mean(usedBandwidthAtSeconds[i]))
 
 # Graphs boxplot for the metric passed in
 def graphBoxPlot(stats, statType, yLabel, fileName, minm, maxm, step):
@@ -234,6 +237,8 @@ while exists:
         averageInputLatencyAtSeconds = []
         availableBandwidthsAtSeconds = []
         averageAvailableBandwidthAtSeconds = []
+        usedBandwidthAtSeconds = []
+        averageUsedBandwidthAtSeconds = []
 
         # Enters each test folder for analysis
         os.chdir("Test" + str(testNum))
@@ -257,6 +262,7 @@ while exists:
         # graphBoxPlot(usedBandwidthStats, AVERAGE, "Average Used BandWidth (Mbps)", "UsedBandwidthAverages", 0, 52, 2)
         graphBoxPlot(usedBandwidthStats, DEVIATION, "Used BandWidth Standard Deviation (Mbps)", "UsedBandwidthDeviations", 0, 20, 1)
         graphDistr(usedBandWidths, "Used BandWidth (Mbps)", "UsedBandwidths", 0, 52, 2)
+        graphSecondsBar(averageUsedBandwidthAtSeconds, "Average Used BandWidth (Mbps)", "AverageUsedBandwidth", 0, 52, 2)
 
         graphBoxPlot(availableBandwidths, NONE, "Available BandWidth (Mbps)", "AvailableBandwidths", 0, 160, 10)
         # graphBoxPlot(availableBandwidthStats, AVERAGE, "Average Available BandWidth (Mbps)", "AvailableBandwidthAverages", 0, 105, 5)
