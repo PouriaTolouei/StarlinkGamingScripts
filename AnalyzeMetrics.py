@@ -22,7 +22,7 @@ AVAILBAND = 7
 
 # Categories 
 resolutionCategories = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
-fpsCategories = list(range(0, 71))
+fpsCategories = list(range(0, 91))
 seconds = list(range(0, 60))
 
 #-------------------------------- Methods ---------------------------------------- 
