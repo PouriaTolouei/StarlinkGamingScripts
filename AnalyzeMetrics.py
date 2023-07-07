@@ -130,11 +130,10 @@ def graphBar(metrics, categories, xLabel, fileName):
 
 # Reads all the raw data from the CSV files in round folders and organizes them into arrays
 def extractData():
-    exists = True
     roundNum = 1
 
     # Keeps extracting data while the round folders exist
-    while exists:
+    while roundNum <= 20 :
         try:
             # Enters each round folder and prints it to confirm
             os.chdir(str(roundNum))
@@ -191,8 +190,7 @@ def extractData():
             roundNum += 1
         
         except FileNotFoundError:
-            # Stops extracting data as no more round folders exist
-            exists = False
+            pass
         
     organizeDataBySecond()
         
