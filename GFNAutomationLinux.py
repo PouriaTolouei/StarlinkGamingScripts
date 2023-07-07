@@ -18,7 +18,7 @@ import matplotlib.dates as mdates
 
 #------------------------- Variables and Constants  ------------------------------ 
 
-KEY_DELAY = 1
+KEY_DELAY = 1.5
 CAPTURE_LENGTH = "120"
 FIELDS = ["Time", "Timestamp", "Ping", "Packet Loss", "Stream FPS", "Used Bandwidth", "Resolution", "Available Bandwidth"]
 FIELDS2 = ["Time", "Timestamp", "Ping", "Packet Loss", "Input Latency"]
