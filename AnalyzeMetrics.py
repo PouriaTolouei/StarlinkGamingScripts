@@ -190,6 +190,7 @@ def extractData():
             roundNum += 1
         
         except FileNotFoundError:
+            roundNum += 1
             pass
         
     organizeDataBySecond()
