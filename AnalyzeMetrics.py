@@ -164,7 +164,7 @@ def extractData():
                 line_count = 0
                 for row in csv_reader:
                     if line_count > 0:
-                        metricsTime.append(datetime.strptime(row[TIME], '%Y-%m-%d %H:%M:%S.%f'))
+                        metricsTime.append(datetime.strptime(row[TIME][0:20], '%Y-%m-%d %H:%M:%S.%f'))
                         pings.append(int(row[PING]))
                         roundPings.append(int(row[PING]))
                         packetLosses.append(int(row[PACKETLOSS]))
@@ -275,6 +275,12 @@ while exists:
 
         graphBar(resolutions, resolutionCategories, "Resolution", "Resolutions")
         graphBar(frames, fpsCategories, "FPS", "FPS")
+
+        statFile = open("Stats.txt", "w")
+        statFile.write(f"Ping (Mean/Median/SD): {statistics.mean(pings)}/{statistics.median(pings)}/{statistics.stdev(pings)}\n")
+        statFile.write(f"Input Latency (Mean/Median/SD): {statistics.mean(inputLatencies)}/{statistics.median(inputLatencies)}/{statistics.stdev(inputLatencies)}\n")
+        statFile.write(f"Round Total Packetloss (Mean/Median/SD): {statistics.mean(totalPacketLosses)}/{statistics.median(totalPacketLosses)}/{statistics.stdev(totalPacketLosses)}")
+        statFile.close()
 
         # Exits the test folder and moves on to the next
         os.chdir('..')
