@@ -295,4 +295,5 @@ while exists:
         statFile.write(f"Round Total Packetloss (Mean/Median/SD): {statistics.mean(totalPacketLosses)}/{statistics.median(totalPacketLosses)}/{statistics.stdev(totalPacketLosses)}")
         statFile.close()
 
+        groupNum += 1
         os.chdir('..')
