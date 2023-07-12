@@ -276,7 +276,7 @@ while exists:
         graphBar(resolutions, resolutionCategories, "Resolution", "Resolutions")
         graphBar(frames, fpsCategories, "FPS", "FPS")
 
-        statFile = open("Stats.txt", "w")
+        statFile = open("Stats.txt", "w+")
         statFile.write(f"Ping (Mean/Median/SD): {statistics.mean(pings)}/{statistics.median(pings)}/{statistics.stdev(pings)}\n")
         statFile.write(f"Input Latency (Mean/Median/SD): {statistics.mean(inputLatencies)}/{statistics.median(inputLatencies)}/{statistics.stdev(inputLatencies)}\n")
         statFile.write(f"Round Total Packetloss (Mean/Median/SD): {statistics.mean(totalPacketLosses)}/{statistics.median(totalPacketLosses)}/{statistics.stdev(totalPacketLosses)}")
