@@ -271,7 +271,7 @@ while exists:
 
         graphBoxPlot(totalPacketLosses, NONE, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
         graphDistr(totalPacketLosses, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
-        graphSecondsBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss", 0, 1100, 100)
+        graphSecondsBar(totalPacketLossAtSeconds, "Total Packet Loss", "TotalPacketLoss", 0, 3600, 100)
 
         graphBar(resolutions, resolutionCategories, "Resolution", "Resolutions")
         graphBar(frames, fpsCategories, "FPS", "FPS")
