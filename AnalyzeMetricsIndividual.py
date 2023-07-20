@@ -279,8 +279,8 @@ while exists:
         statFile = open("Stats.txt", "w+")
         statFile.write(f"Ping (Mean/Median/SD): {statistics.mean(pings)}/{statistics.median(pings)}/{statistics.stdev(pings)}\n")
         statFile.write(f"Input Latency (Mean/Median/SD): {statistics.mean(inputLatencies)}/{statistics.median(inputLatencies)}/{statistics.stdev(inputLatencies)}\n")
-        statFile.write(f"Round Total Packetloss (Mean/Median/SD): {statistics.mean(totalPacketLosses)}/{statistics.median(totalPacketLosses)}/{statistics.stdev(totalPacketLosses)}")
-        statFile.write(f"Available Bandwidth (Mean/Median/SD): {statistics.mean(availableBandwidths)}/{statistics.median(availableBandwidths)}/{statistics.stdev(availableBandwidths)}")
+        statFile.write(f"Round Total Packetloss (Mean/Median/SD): {statistics.mean(totalPacketLosses)}/{statistics.median(totalPacketLosses)}/{statistics.stdev(totalPacketLosses)}\n")
+        statFile.write(f"Available Bandwidth (Mean/Median/SD): {statistics.mean(availableBandwidths)}/{statistics.median(availableBandwidths)}/{statistics.stdev(availableBandwidths)}\n")
         statFile.write(f"Used Bandwidth (Mean/Median/SD): {statistics.mean(usedBandWidths)}/{statistics.median(usedBandWidths)}/{statistics.stdev(usedBandWidths)}")
         statFile.close()
 
