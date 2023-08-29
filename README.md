@@ -39,8 +39,20 @@ On each of the systems, follow these steps:
 2. Under the Varibles and Constants of the script, update the CAPTURE_PATH to match the directory where the data collection script is stored on your remote systems (no need to include "results/temp").
    - This script assumes that the two remote systems have the exact same directory for storing the data collection scripts. 
 4. Use the following command to start a testing session:
-   - python3 Directory/RunTests.py system1_IP system1_username system1_password system1_type system2_IP system2_username system2_password system2_type number_of_5_round_sets
+   - "python3 Directory/RunTests.py system1_IP system1_username system1_password system1_type system2_IP" system2_username system2_password system2_type number_of_5_round_sets
    - The system_type can be either "host" or "guest" depending on if the system is creating a private match or joining one.
-   - A completed example: "python3 RunTests.py 111.22.333.44 pouria 123456 host pouria 555.66.777.88 pouria 123456"
-5. You can set this command as a cronjob to automatically run tests without supervision.
+   - A completed example where two systems each create their own private match is: "python3 RunTests.py 111.22.333.44 pouria 123456 host 555.66.777.88 pouria 123456 host"
+
+You can set this command as a cronjob to automatically run tests without supervision.
+
+## Analyzing the collected data
+1. Download all of your "Results" folders across the different systems.
+2. For each scenario involving two system, create a folder. Within that folder, include a copy of  AnalyzeMetricsCombined.py script and create a folder for each systems.
+   - The script creates combined graphs and stores them in the "Analysis" folder which will be automatically generated inside the scenario folder.
+3. Within each system folder, include the "Results" folder that system and include a copy of AnalyzeMetricsIndividual.py script.
+   - The scripts creates graphs and stores them in the "Analysis" folder which will be automatically generated inside the "Results" folder.
+  
+To find the analysis scripts and see an example of this structure, please take a look at the "DataAnalysis" folder.
+  
+   
 
