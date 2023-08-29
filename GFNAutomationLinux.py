@@ -19,18 +19,19 @@ import matplotlib.dates as mdates
 #------------------------- Variables and Constants  ------------------------------ 
 
 KEY_DELAY = 3
-CAPTURE_LENGTH = "120"
+CAPTURE_LENGTH = "120" # Length of a round for data collection
 FIELDS = ["Time", "Timestamp", "Ping", "Packet Loss", "Stream FPS", "Used Bandwidth", "Resolution", "Available Bandwidth"]
 FIELDS2 = ["Time", "Timestamp", "Ping", "Packet Loss", "Input Latency"]
 
+# Change accordingly based on the system
 INTERFACE = "enp2s0"
-
-PROFILE_PATH = "/home/pouriatolouei/.config/google-chrome/"
+PROFILE_PATH = "/home/pouriatolouei/.config/google-chrome/" # Necessary for saving login data
 CAPTURE_PATH = "/home/pouriatolouei/Documents/StarLinkGamingScripts/Results/temp/"
 PLAYER_TYPE = sys.argv[1]
 EXHAUST_POS_X = 960
 EXHAUST_POS_Y = 965
 
+# Metric positions
 SEC = 0
 TIME = 1
 PING = 2
@@ -181,6 +182,7 @@ def captureTraffic():
   global roundNum
   roundNum = 1
 
+  # Creates a folder for the round data
   while not succesfullyCreated:
     try:
       os.mkdir(CAPTURE_PATH + str(roundNum))
@@ -248,7 +250,7 @@ def captureAction(measurements):
 # Boosts the car and captures the time the key was pressed
 def boost(measurements):
    
-  # Collects the ping corresponding to the key press
+  # Collects the ping and packet loss corresponding to the key press
    ping = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[5]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[2]/div[3]/span')
    packetLoss = driver.find_element(By.XPATH, '//*[@id="fullscreen-container"]/nv-igo/nv-osd/div/div[5]/div/div[2]/div/nv-statistics-overlay/div/div/div/div[3]/div[2]/div/span[1]')
    measurements.append(int(ping.text))
@@ -256,7 +258,7 @@ def boost(measurements):
    
    holdKey('x', driver, 0.07) # Presses the boost key for the average key press time
    
-   # Captures the time
+   # Captures the time the key was pressed
    key_time = time.time() 
    measurements.append(key_time)
 
@@ -265,14 +267,16 @@ def driveCar():
   timeout = int(CAPTURE_LENGTH) # duration of gameplay
   startTime = time.time() # Keeps track of the starting time
 
-  while time.time() < startTime + timeout:
+  
+    while time.time() < startTime + timeout:
       measurements = [] # Keeps track of the input latency measurements
 
       sec = time.time() - startTime # seconds passed since the start of input latency collection
-      actualTime = datetime.now()
+      actualTime = datetime.now() # The actual since since the start of input latency collection
       measurements.append(sec)
       measurements.append(actualTime)
-     
+
+      # Measures data for input latency
       boost(measurements)
       captureAction(measurements)
 
@@ -398,23 +402,23 @@ os.chdir("..")
 display = Display(visible= False, size=(1920, 1080), use_xauth=True)
 display.start()
 
-# Resets the metrics array
-metrics = []
-inputLatency = []
+# Metrics arrays
+metrics = [] # Network stats overlay metrics
+inputLatency = [] # Input latency and some corresponding stats overlay metrics
 
-# Loads my chrome profile, so that GFN doesn't require login
 options = webdriver.ChromeOptions() 
+# Loads chrome profile, so that GFN doesn't require login
 options.add_argument("user-data-dir=" + PROFILE_PATH)
+# Hides the automation label to get a true full screen effect
 options.add_experimental_option("useAutomationExtension", False)
 options.add_experimental_option("excludeSwitches", ["enable-automation"]) 
-# options.add_experimental_option("detach", True)
+# Creates an instance of chrome
 driver = webdriver.Chrome(options=options)
 # Makes sure the window is maximized
 driver.maximize_window()
 
 # Launches the game and match
 element = launchGame()
-
 launchMatch()
 
 # Waits for match to load
