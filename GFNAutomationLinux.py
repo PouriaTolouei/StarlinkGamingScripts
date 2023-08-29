@@ -17,6 +17,7 @@ import matplotlib.dates as mdates
 
 
 #------------------------- Variables and Constants  ------------------------------ 
+PLAYER_TYPE = sys.argv[1] # "host" or "guest", depends on whether match needs to be created or joined
 
 KEY_DELAY = 3
 CAPTURE_LENGTH = "120" # Length of a round for data collection
@@ -27,7 +28,6 @@ FIELDS2 = ["Time", "Timestamp", "Ping", "Packet Loss", "Input Latency"]
 INTERFACE = "enp2s0"
 PROFILE_PATH = "/home/pouriatolouei/.config/google-chrome/" # Necessary for saving login data
 CAPTURE_PATH = "/home/pouriatolouei/Documents/StarLinkGamingScripts/Results/temp/"
-PLAYER_TYPE = sys.argv[1]
 EXHAUST_POS_X = 960
 EXHAUST_POS_Y = 965
 
