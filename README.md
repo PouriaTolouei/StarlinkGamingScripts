@@ -45,7 +45,7 @@ On each of the systems, follow these steps:
 
 You can set this command as a cronjob to automatically run tests without supervision.
 
-## Analyzing the collected data
+## Analyzing the Collected Data
 1. Download all of your "Results" folders across the different systems.
 2. For each scenario involving two system, create a folder. Within that folder, include a copy of  AnalyzeMetricsCombined.py script and create a folder for each systems.
    - The script creates combined graphs and stores them in the "Analysis" folder which will be automatically generated inside the scenario folder.
