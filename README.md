@@ -6,10 +6,11 @@
 3. Install wireshark (3.6.2).
    - Allow non-root users to run network capture.
    - Run "sudo chmod +x /usr/bin/dumpcap" after the installation.
-4. Install xvfb (necessary for running a virtual display)
+4. Install xvfb (necessary for running a virtual display).
 5. Place the GFNAutomationLinux.py file in the directory where you wish to store your data.
    - Make sure the directory and your username is consistent across the two systems.
 6. Have two seperate Geforce Now accounts ready.
+   - Preferably with priority subscription or better to avoid long queues and timeout in the script.
 
 <br> On each of the systems, follow these steps: <br> <br>
 
