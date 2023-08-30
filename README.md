@@ -32,10 +32,6 @@
     - The Merc body (one of the defaults) is recommded.   
 12. Before running the script, make sure that
     - All the libraries at the top of the script are installed.
-       - selenium
-       - matplotlib
-       - pyvirtualdisplay
-       - mss   
     - Your chrome is logged into a single profile and pop-up for choosing a profile is disabled.
     - You have already logged into Geforce Now.
     - You have already manually tried to set up or join a private match on rocket league.
