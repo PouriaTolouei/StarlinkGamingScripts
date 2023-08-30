@@ -6,8 +6,7 @@
 3. Place the GFNAutomationLinux.py file in the directory where you wish to store your data.
    - Make sure the directory and your username is consistent across the two systems.
 4. Have two seperate Geforce Now accounts ready.
-
-On each of the systems, follow these steps: <br>
+<br> On each of the systems, follow these steps: <br> <br>
 5. Under the Varibles and Constants section of the script, adjust the following based on your system:
    - INTERFACE: The network interace you wish to collect your data over
    - PROFILE_PATH: Your chrome profile path which can be found in chrome://version/ under the "Profile Path" field (use the parent folder)
