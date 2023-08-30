@@ -6,31 +6,32 @@
 3. Install wireshark (3.6.2).
    - Allow non-root users to run network capture.
    - Run "sudo chmod +x /usr/bin/dumpcap" after the installation.
-4. Place the GFNAutomationLinux.py file in the directory where you wish to store your data.
+4. Install xvfb (necessary for running a virtual display)
+5. Place the GFNAutomationLinux.py file in the directory where you wish to store your data.
    - Make sure the directory and your username is consistent across the two systems.
-5. Have two seperate Geforce Now accounts ready.
+6. Have two seperate Geforce Now accounts ready.
 
 <br> On each of the systems, follow these steps: <br> <br>
 
-6. Under the Varibles and Constants section of the script, adjust the following based on your system:
+7. Under the Varibles and Constants section of the script, adjust the following based on your system:
    - INTERFACE: The network interace you wish to collect your data over.
    - PROFILE_PATH: Your chrome profile path which can be found in chrome://version/ under the "Profile Path" field (use the parent folder).
    - CAPTURE_PATH: The directory for saving the data: script_directory/Results/temp/ (The results and temp folders will be created automatically).
    - EXHAUST_POS_X and EXHAUST_POS_Y: The center position for the car's exhaust depending on the screen resolution.
-7. Log into Geforce Now on your chrome browser and in the settings, adjust the following options based on your needs:
+8. Log into Geforce Now on your chrome browser and in the settings, adjust the following options based on your needs:
    - Server Location
    - Stream Quality
-8. Launch Rocket League, login as necessary, and try setting up or joining a private match.
+9. Launch Rocket League, login as necessary, and try setting up or joining a private match.
    - The game remembers the last selected gameplay mode and private match joining details, so not doing this  affects the navigation.
-9. While the game is running, use Ctrl + G to launch GeforceNow overlay and go into settings:
+10. While the game is running, use Ctrl + G to launch GeforceNow overlay and go into settings:
    - Under "Shortcut controls", set "Change format" shortcut to "N".
    - Under "Heads up display", set statistics "Position" to "Upper right".
-10. While the game is running, go into the game settings:
+11. While the game is running, go into the game settings:
     - Under "Controls" > "View/Change bindings", set "Boost" to "X".
     - Under "Camera", set "Stiffness" to 1.00.
-11. Make sure the car body chosen under "Garage" in Rocket League has an exhaust that's easy to track.
+12. Make sure the car body chosen under "Garage" in Rocket League has an exhaust that's easy to track.
     - The Merc body (one of the defaults) is recommded.   
-12. Before running the script, make sure that
+13. Before running the script, make sure that
     - All the libraries at the top of the script are installed.
        - selenium (4.10.0)
        - matplotlib (3.7.1)
