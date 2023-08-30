@@ -25,8 +25,8 @@
 9. Launch Rocket League, login as necessary, and try setting up or joining a private match.
    - The game remembers the last selected gameplay mode and private match joining details, so not doing this  affects the navigation.
 10. While the game is running, use Ctrl + G to launch GeforceNow overlay and go into settings:
-   - Under "Shortcut controls", set "Change format" shortcut to "N".
-   - Under "Heads up display", set statistics "Position" to "Upper right".
+    - Under "Shortcut controls", set "Change format" shortcut to "N".
+    - Under "Heads up display", set statistics "Position" to "Upper right".
 11. While the game is running, go into the game settings:
     - Under "Controls" > "View/Change bindings", set "Boost" to "X".
     - Under "Camera", set "Stiffness" to 1.00.
