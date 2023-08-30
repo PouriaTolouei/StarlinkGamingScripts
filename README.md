@@ -58,10 +58,10 @@ You can also set this command as a cronjob to automatically run tests without su
 
 ## Analyzing the Collected Data
 1. Download all of your "Results" folders across the different systems.
-2. For each scenario involving two system, create a folder. Within that folder, include a copy of  AnalyzeMetricsCombined.py script and create a folder for each systems.
-   - The script creates combined graphs and stores them in the "Analysis" folder which will be automatically generated inside the scenario folder.
-3. Within each system folder, include the "Results" folder that system and include a copy of AnalyzeMetricsIndividual.py script.
-   - The scripts creates graphs and stores them in the "Analysis" folder which will be automatically generated inside the "Results" folder.
+2. For each scenario involving two systems, create a folder. Within that folder, include a copy of the AnalyzeMetricsCombined.py script and create a folder for each system.
+   - Running the script creates combined graphs and stores them in the "Analysis" folder which will be automatically generated inside the scenario folder.
+3. Within each system folder, include the "Results" folder for that system and also include a copy of AnalyzeMetricsIndividual.py script.
+   - Running the script creates various graphs and stores them in the "Analysis" folder which will be automatically generated inside the "Results" folder.
   
 To find the analysis scripts and see an example of this structure, please take a look at the "DataAnalysis" folder.
   
