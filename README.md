@@ -25,15 +25,17 @@
 9. While the game is running, go into the game settings:
    - Under "Controls" > "View/Change bindings", set "Boost" to "X".
    - Under "Camera", set "Stiffness" to 1.00.
+     
 10. Make sure the car body chosen under "Garage" in Rocket League has an exhaust that's easy to track.
-      - The Merc body (one of the defaults) is recommded.
-11. Before running the script, make sure that
-      - All the libraries at the top of the script are installed.
-      - Your chrome is logged into a single profile and pop-up for choosing a profile is disabled.
-      - You have already logged into Geforce Now.
-      - You have already manually tried to set up or join a private match on rocket league.
-      - You have properly set the Geforce Now and Rocket League settings and key bindings.
-      - You have properly ended the previous Geforce Now session (otherwise it will load mid-session and breaks the script).
+    - The Merc body (one of the defaults) is recommded.
+     
+12. Before running the script, make sure that
+    - All the libraries at the top of the script are installed.
+    - Your chrome is logged into a single profile and pop-up for choosing a profile is disabled.
+    - You have already logged into Geforce Now.
+    - You have already manually tried to set up or join a private match on rocket league.
+    - You have properly set the Geforce Now and Rocket League settings and key bindings.
+    - You have properly ended the previous Geforce Now session (otherwise it will load mid-session and breaks the script).
   
 ## Running the Data Collection Script
 1. Copy RunTests.py onto a system that is different from the system that is running the game.
