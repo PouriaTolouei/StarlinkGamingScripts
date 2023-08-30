@@ -27,6 +27,7 @@
    - Under "Camera", set "Stiffness" to 1.00.
 10. Make sure the car body chosen under "Garage" in Rocket League has an exhaust that's easy to track.
    - The Merc body (one of the defaults) is recommded.
+   - 
 11. Before running the script, make sure that
    - All the libraries at the top of the script are installed.
    - Your chrome is logged into a single profile and pop-up for choosing a profile is disabled.
