@@ -52,7 +52,7 @@
    - The system_type can be either "host" or "guest" depending on if the system is creating a private match or joining one.
    - A completed example where two systems each create their own private match is: "python3 RunTests.py 111.22.333.44 pouria 123456 host 555.66.777.88 pouria 123456 host".
 
-You can set this command as a cronjob to automatically run tests without supervision.
+You can also set this command as a cronjob to automatically run tests without supervision.
 
 ## Analyzing the Collected Data
 1. Download all of your "Results" folders across the different systems.
