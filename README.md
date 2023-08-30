@@ -26,8 +26,8 @@
    - Under "Shortcut controls", set "Change format" shortcut to "N".
    - Under "Heads up display", set statistics "Position" to "Upper right".
 10. While the game is running, go into the game settings:
-    - Under "Controls" > "View/Change bindings", set "Boost" to "X".
-    - Under "Camera", set "Stiffness" to 1.00.
+   - Under "Controls" > "View/Change bindings", set "Boost" to "X".
+   - Under "Camera", set "Stiffness" to 1.00.
 11. Make sure the car body chosen under "Garage" in Rocket League has an exhaust that's easy to track.
     - The Merc body (one of the defaults) is recommded.   
 12. Before running the script, make sure that
