@@ -7,7 +7,7 @@
    - Make sure the directory and your username is consistent across the two systems.
 4. Have two seperate Geforce Now accounts ready.
 
-<br><br> On each of the systems, follow these steps: <br> <br>
+<br> On each of the systems, follow these steps: <br> <br>
 
 5. Under the Varibles and Constants section of the script, adjust the following based on your system:
    - INTERFACE: The network interace you wish to collect your data over
