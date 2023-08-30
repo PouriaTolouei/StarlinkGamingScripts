@@ -50,7 +50,7 @@
 4. Use the following command to start a testing session:
    - "python3 Directory/RunTests.py system1_IP system1_username system1_password system1_type system2_IP system2_username system2_password system2_type number_of_5_round_sets".
    - The system_type can be either "host" or "guest" depending on if the system is creating a private match or joining one.
-   - A completed example where two systems each create their own private match is: "python3 RunTests.py 111.22.333.44 pouria 123456 host 555.66.777.88 pouria 123456 host 1".
+   - A completed example where two systems each create their own private match for 5 rounds is: "python3 RunTests.py 111.22.333.44 pouria 123456 host 555.66.777.88 pouria 123456 host 1".
 
 You can also set this command as a cronjob to automatically run tests without supervision.
 
