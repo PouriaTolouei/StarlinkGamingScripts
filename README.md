@@ -3,7 +3,7 @@
 ## Setting Up the Data Collection Script
 1. Copy GFNAutomationLinux.py onto the two remote systems that you want to run the game on. 
 2. Install and set up selenium on each using this tutorial: https://pypi.org/project/selenium/
-3. Install wireshark using pip.
+3. Install wireshark (3.6.2).
    - Allow non-root users to run network capture.
    - Run "sudo chmod +x /usr/bin/dumpcap" after the installation.
 4. Place the GFNAutomationLinux.py file in the directory where you wish to store your data.
@@ -32,6 +32,10 @@
     - The Merc body (one of the defaults) is recommded.   
 12. Before running the script, make sure that
     - All the libraries at the top of the script are installed.
+       - selenium (4.10.0)
+       - matplotlib (3.7.1)
+       - pyvirtualdisplay (3.0)
+       - mss (9.0.1)
     - Your chrome is logged into a single profile and pop-up for choosing a profile is disabled.
     - You have already logged into Geforce Now.
     - You have already manually tried to set up or join a private match on rocket league.
@@ -40,7 +44,7 @@
   
 ## Running the Data Collection Script
 1. Copy RunTests.py onto a system that is different from the system that is running the game.
-2. Install the paramiko library.
+2. Install the paramiko library (2.9.3).
 3. Under the Varibles and Constants of the script, update the CAPTURE_PATH to match the directory where the data collection script is stored on your remote systems (no need to include "results/temp").
    - This script assumes that the two remote systems have the exact same directory for storing the data collection scripts.
 4. Use the following command to start a testing session:
