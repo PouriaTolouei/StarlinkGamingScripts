@@ -3,10 +3,10 @@
 ## Setting Up the Data Collection Script
 1. Copy GFNAutomationLinux.py onto the two remote systems that you want to run the game on. 
 2. Install and set up selenium on each using this tutorial: https://pypi.org/project/selenium/
-3. Install wireshark (3.6.2).
+3. Install wireshark (3.6.2) on each.
    - Allow non-root users to run network capture.
    - Run "sudo chmod +x /usr/bin/dumpcap" after the installation.
-4. Install xvfb (necessary for running a virtual display).
+4. Install xvfb (necessary for running a virtual display) on each.
 5. Place the GFNAutomationLinux.py file in the directory where you wish to store your data.
    - Make sure the directory and your username is consistent across the two systems.
 6. Have two seperate Geforce Now accounts ready.
@@ -15,8 +15,9 @@
 <br> On each of the systems, follow these steps: <br> <br>
 
 7. Under the Varibles and Constants section of the script, adjust the following based on your system:
-   - INTERFACE: The network interace you wish to collect your data over.
+   - INTERFACE: The network interface you wish to collect your data over.
    - PROFILE_PATH: Your chrome profile path which can be found in chrome://version/ under the "Profile Path" field (use the parent folder).
+      - This is necessary to automatically login into Geforce Now during automation. 
    - CAPTURE_PATH: The directory for saving the data: script_directory/Results/temp/ (The results and temp folders will be created automatically).
    - EXHAUST_POS_X and EXHAUST_POS_Y: The center position for the car's exhaust depending on the screen resolution.
 8. Log into Geforce Now on your chrome browser and in the settings, adjust the following options based on your needs:
@@ -41,7 +42,7 @@
     - Your chrome is logged into a single profile and pop-up for choosing a profile is disabled.
     - You have already logged into Geforce Now.
     - You have already manually tried to set up or join a private match on rocket league.
-    - You have properly set the Geforce Now and Rocket League settings and key bindings.
+    - You have properly set up Geforce Now and Rocket League settings and key bindings.
     - You have properly ended the previous Geforce Now session (otherwise it will load mid-session and breaks the script).
   
 ## Running the Data Collection Script
