@@ -61,6 +61,7 @@ You can also set this command as a cronjob to automatically run tests without su
 1. Download all of your "Results" folders across the different systems.
 2. For each scenario involving two systems, create a folder. Within that folder, include a copy of the AnalyzeMetricsCombined.py script and create a folder for each system.
    - Running the script creates combined graphs and stores them in the "Analysis" folder which will be automatically generated inside the scenario folder.
+   - Be sure to set the FOLDERNAME and LABEL constants accordingly for each system at the top of the script
 3. Within each system folder, include the "Results" folder for that system and also include a copy of AnalyzeMetricsIndividual.py script.
    - Running the script creates various graphs and stores them in the "Analysis" folder which will be automatically generated inside the "Results" folder.
   

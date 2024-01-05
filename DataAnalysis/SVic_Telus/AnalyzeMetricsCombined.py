@@ -1,9 +1,15 @@
-import csv, os, statistics
+import csv, os, statistics, sys
 import matplotlib.pyplot as plt
 from datetime import datetime
 import numpy as np
 
 #------------------------- Variables and Constants  ------------------------------ 
+# Filenames and Labels
+FOLDERNAME1 = "Vic"
+LABEL1 = "Victoria Starlink"
+FOLDERNAME2 = "Telus"
+LABEL2 = "Victoria Telus"
+
 # Boxplot stat types
 NONE = -1
 AVERAGE = 0
@@ -20,34 +26,29 @@ USEDBAND = 5
 RESOLUTION = 6
 AVAILBAND = 7
 
-# Categories 
-resolutionCategories = ['480 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1366 x 768 (16:9)', '1600 x 900 (16:9)', '1920 x 1080 (16:9)']
-fpsCategories = list(range(0, 91))
-seconds = list(range(0, 60))
-
 #-------------------------------- Methods ---------------------------------------- 
 
 # Graphs boxplot for the metric passed in
 def graphBoxPlot(metrics1, metrics2, yLabel, fileName, minm, maxm, step, width, height):
-    metrics = {'Victoria Telus': metrics1, 'Victoria Starlink': metrics2}
+    metrics = {'Victoria Telus 1': metrics1, 'Victoria Telus 2': metrics2}
     plt.figure(figsize =(width, height))
     plt.ylim(minm, maxm)
     plt.yticks(range(minm, maxm, step))
     plt.boxplot(metrics.values(), labels=metrics.keys())
     plt.ylabel(yLabel)
-    plt.savefig(fileName + ".jpg")
+    plt.savefig(fileName + ".svg", format = 'svg', dpi=600)
     plt.clf()
     plt.close()
 
 # Graphs boxplot for the metric passed in
 def graphBoxPlotDecimal(metrics1, metrics2, yLabel, fileName, minm, maxm, step, width, height):
-    metrics = {'Victoria Telus': metrics1, 'Victoria Starlink': metrics2}
-    plt.figure(figsize =(width, height))
+    metrics = {LABEL1: metrics1, LABEL2: metrics2}
+    plt.figure(figsize =(width, height))  
     plt.ylim(minm, maxm)
     plt.yticks(np.arange(minm, maxm, step))
     plt.boxplot(metrics.values(), labels=metrics.keys())
     plt.ylabel(yLabel)
-    plt.savefig(fileName + ".jpg")
+    plt.savefig(fileName + ".svg", format = 'svg', dpi=600)
     plt.clf()
     plt.close()
 
@@ -72,12 +73,12 @@ def graphDistr(metrics1, metrics2, xLabel, fileName, minm, maxm, step, width, he
     for i in range(len(x2)):
         set2[x2[i]] = y2[i]
 
-    plt.plot(set1.keys(), set1.values(), marker='', label='Victoria Telus CDF', color='red')
-    plt.plot(set2.keys(), set2.values(), marker='', label='Victoria Starlink CDF', color='blue')
+    plt.plot(set1.keys(), set1.values(), marker='', label=LABEL1+' CDF', color='red')
+    plt.plot(set2.keys(), set2.values(), marker='', label=LABEL2+' CDF', color='blue')
     plt.legend(loc="upper left")
     plt.xlabel(xLabel)
     plt.ylabel('Likelihood of occurrence')
-    plt.savefig(fileName + "Distr.jpg")
+    plt.savefig(fileName + "Distr.svg", format = 'svg', dpi=600)
     plt.margins(0)
     plt.clf()
     plt.close()
@@ -162,11 +163,12 @@ totalPacketLosses2 = []
 packetLossRatios2 = []
 
 testNum = 1 
-folderNames = ['Telus', 'Vic']
+folderNames = [FOLDERNAME1, FOLDERNAME2]
 data = {folderNames[0]: [latenciesTime1, metricsTime1, inputLatencies1, pings1, packetLosses1, usedBandWidths1, availableBandwidths1, frames1, resolutions1, totalPacketLosses1], folderNames[1]: [latenciesTime2, metricsTime2, inputLatencies2, pings2, packetLosses2, usedBandWidths2, availableBandwidths2, frames2, resolutions2, totalPacketLosses2]}
 
 for folderName in folderNames:
     os.chdir(folderName)
+    os.chdir("Results")
     # Keeps analyzing while the test folders exist
     for i in range(1,5):
     
@@ -176,7 +178,8 @@ for folderName in folderNames:
 
         # Exits the test folder and moves on to the next
         os.chdir('..')
-        
+    
+    os.chdir('..')
     os.chdir('..')
 
 try:
@@ -191,6 +194,8 @@ for totalPacketloss1 in totalPacketLosses1:
 
 for totalPacketloss2 in totalPacketLosses2:
     packetLossRatios2.append((totalPacketloss2 / 250000)*100)
+
+
 
 
 # Graph generation
